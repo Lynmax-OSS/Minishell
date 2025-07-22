@@ -6,7 +6,7 @@
 /*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:58:58 by keteo             #+#    #+#             */
-/*   Updated: 2025/05/31 01:16:06 by keteo            ###   ########.fr       */
+/*   Updated: 2025/07/22 15:16:36 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int		ft_isdigit(int c);
 int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_isalnum(int c);
+int		is_whitespace(int c);
 int		ft_strlen(const char *str);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
@@ -80,5 +81,6 @@ void	ft_putptr_count(size_t ptr, int *count);
 void	ft_puthex_count(unsigned int hex, int *count, char x_or_x);
 int		ft_printf(const char *format, ...);
 long	ft_atol(const char *str);
+void	skip_whitespace(char *str);
 
 #endif
