@@ -10,28 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 char **tokenizer(const char *input)
 {
 	char	**token;
+	char	*line;
 	int		i;
 
-	if (!init_token(token))
-		perror("Token initialization failed");
-	i = 0;
-	while (*input)
+	line = (char *)input;
+	if (!token_init(&token))
 	{
-		if (is_whitespace(&input))
-			skip_whitespace(&input);
-		else if (*input == '\'')
-			token[i++] = extract_single_quote(&input);
-		else if (*input == '\"')
-			token[i++] = extract_double_quote(&input);
-		else if (*input == '>' || *input == '<' || *input == '|')
-			token[i++] = extract_operator(&input);
+		perror("Token initialization failed");
+		exit(1);
+	}
+	i = 0;
+	while (*line)
+	{
+		// printf("Current char: '%c'\n", *input);
+		if (is_whitespace(*line))
+			skip_whitespace(line);
+		else if (*line == '\'')
+			token[i++] = extract_single_quotes(&line);
+		else if (*line == '\"')
+			token[i++] = extract_double_quotes(&line);
+		else if (is_operator(*line))
+			token[i++] = extract_operator(&line);
 		else
-		 	token[i++] = extract_regular_token(&input);
+		 	token[i++] = extract_regular_token(&line);
 	}
 	token[i] = NULL;
 	return (token);

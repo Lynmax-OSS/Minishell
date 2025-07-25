@@ -11,19 +11,25 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+
+void print_tokens(char **tokens)
+{
+	int i = 0;
+	while (tokens[i])
+	{
+		ft_printf("Token[%d]: [%s]\n", i, tokens[i]);
+		i++;
+	}
+}
 
 int	main(void)
 {
 	char *line;
+	char	**tokens;
 
 	while (1)
 	{
 		line = readline("minishell> ");
-		tokenizer(line);
 		if (!line)
 		{
 			printf("exit\n");
@@ -31,6 +37,8 @@ int	main(void)
 		}
 		if (*line)
 			add_history(line);
+		tokens = tokenizer(line);
+		print_tokens(tokens);
 		free(line);
 	}
 	return (0);
