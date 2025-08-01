@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-char **tokenizer(const char *input)
+char **tokenizer( char *input)
 {
 	char	**token;
 	char	*line;
