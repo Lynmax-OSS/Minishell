@@ -11,13 +11,15 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stddef.h>
 
-char	*ft_strndup(const char *str, int len)
+char	*ft_strndup(const char *str, size_t len)
 {
 	char	*res;
-	int		i;
+	size_t	i;
 
-	res = malloc(sizeof(char) * (len + 1));
+	res = malloc(len + 1);
+	i = 0;
 	if (res == NULL)
 		return (NULL);
 	while (i < len)

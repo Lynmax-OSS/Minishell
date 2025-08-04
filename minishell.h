@@ -12,7 +12,7 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# define MAX_TOKEN 1024
+# define MAX_TOKENS 1024
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -22,12 +22,13 @@
 # include <readline/history.h>
 # include "libft/libft.h"
 
-char	**tokenizer(const char *input);
-int		token_init(char ***token);
-char	*extract_double_quotes(char **line);
-char	*extract_single_quotes(char **line);
-char	*extract_operator(char **line);
 char	*extract_regular_token(char **line);
-bool	is_operator(char c);
+char	*extract_operator(char **line);
+char	*extract_double_quote(char **line);
+char	*extract_single_quote(char **line);
+int		is_whitespace(char c);
+int		is_operator(char c);
+void	skip_whitespace(char **line);
+char	**tokenizer(char *input);
 
 #endif

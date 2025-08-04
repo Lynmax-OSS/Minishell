@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_init.c                                       :+:      :+:    :+:   */
+/*   general_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/22 15:17:27 by keteo             #+#    #+#             */
-/*   Updated: 2025/07/22 15:17:27 by keteo            ###   ########.fr       */
+/*   Created: 2025/08/01 16:07:17 by keteo             #+#    #+#             */
+/*   Updated: 2025/08/01 16:07:17 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
-int	token_init(char ***token)
+int	is_whitespace(char c)
 {
-	*token = malloc((sizeof(char *) * MAX_TOKEN));
-	if (!*token)
-		return (0);
-	return (1);
+	return (c == ' ' || c == '\t');
+}
+
+int	is_operator(char c)
+{
+	return (c == '>' || c == '<' || c == '|');
+}
+
+void	skip_whitespace(char **line)
+{
+	while (**line && is_whitespace(**line))
+		(*line)++;
 }

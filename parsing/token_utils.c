@@ -10,50 +10,45 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
-bool	is_operator(char c)
+char	*extract_single_quote(char **line)
 {
-	return (c == '<' || c == '>' || c == '|');
-}
-
-char	*extract_double_quotes(char **line)
-{
-	char	*result;
 	char	*start;
 	int		len;
+	char	*result;
 
 	(*line)++;
-	len = 0;
 	start = *line;
-	while (**line && **line != '\"')
+	len = 0;
+	while (**line && **line != '\'')
 	{
-		(*line)++;
 		len++;
-	}
-	result = ft_strndup(start, len);
-	if (**line == '\"')
 		(*line)++;
+	}
+	if (**line == '\'')
+		(*line)++;
+	result = ft_strndup(start, len);
 	return (result);
 }
 
-char	*extract_single_quotes(char **line)
+char	*extract_double_quote(char **line)
 {
-	char	*result;
 	char	*start;
 	int		len;
+	char	*result;
 
 	(*line)++;
-	len = 0;
 	start = *line;
-	while (**line != '\'')
+	len = 0;
+	while (**line && **line != '\"')
 	{
 		len++;
 		(*line)++;
 	}
-	result = ft_strndup(start, len);
-	if (**line == '\'')
+	if (**line == '\"')
 		(*line)++;
+	result = ft_strndup(start, len);
 	return (result);
 }
 
@@ -62,7 +57,7 @@ char	*extract_operator(char **line)
 	char	*result;
 
 	if ((**line == '<' && *(*line + 1) == '<')
-		 || (**line == '>' && *(*line + 1) == '>'))
+		|| (**line == '>' && *(*line + 1) == '>'))
 	{
 		result = ft_strndup(*line, 2);
 		*line += 2;
@@ -77,16 +72,17 @@ char	*extract_operator(char **line)
 
 char	*extract_regular_token(char **line)
 {
-	char	*result;
 	char	*start;
 	int		len;
+	char	*result;
 
 	start = *line;
 	len = 0;
-	while (!is_whitespace(**line) && !is_operator(**line) && **line != '\'' && **line != '\"')
+	while (**line && !is_whitespace(**line)
+		&& !is_operator(**line) && **line != '\'' && **line != '\"')
 	{
-		(*line)++;
 		len++;
+		(*line)++;
 	}
 	result = ft_strndup(start, len);
 	return (result);

@@ -10,35 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
-char **tokenizer( char *input)
+char	**tokenizer(char *input)
 {
-	char	**token;
-	char	*line;
+	char	**tokens;
 	int		i;
 
-	line = (char *)input;
-	if (!token_init(&token))
-	{
-		perror("Token initialization failed");
-		exit(1);
-	}
+	tokens = malloc(sizeof(char *) * MAX_TOKENS);
+	if (!tokens)
+		return (NULL);
 	i = 0;
-	while (*line)
+	ft_strndup("hello", 5);
+	while (*input)
 	{
-		// printf("Current char: '%c'\n", *input);
-		if (is_whitespace(*line))
-			skip_whitespace(line);
-		else if (*line == '\'')
-			token[i++] = extract_single_quotes(&line);
-		else if (*line == '\"')
-			token[i++] = extract_double_quotes(&line);
-		else if (is_operator(*line))
-			token[i++] = extract_operator(&line);
+		skip_whitespace(&input);
+		if (!*input)
+			break ;
+		if (*input == '\'')
+			tokens[i++] = extract_single_quote(&input);
+		else if (*input == '\"')
+			tokens[i++] = extract_double_quote(&input);
+		else if (is_operator(*input))
+			tokens[i++] = extract_operator(&input);
 		else
-		 	token[i++] = extract_regular_token(&line);
+			tokens[i++] = extract_regular_token(&input);
 	}
-	token[i] = NULL;
-	return (token);
+	tokens[i] = NULL;
+	return (tokens);
 }

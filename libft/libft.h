@@ -6,7 +6,7 @@
 /*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 14:58:58 by keteo             #+#    #+#             */
-/*   Updated: 2025/07/22 17:29:31 by keteo            ###   ########.fr       */
+/*   Updated: 2025/08/04 14:22:02 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int		ft_isdigit(int c);
 int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_isalnum(int c);
-int		is_whitespace(int c);
 int		ft_strlen(const char *str);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
@@ -51,7 +50,7 @@ void	*ft_memset(void *s, int c, size_t n);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strdup(const char *s);
-char	*ft_strndup(const char *str, int len);
+char	*ft_strndup(const char *str, size_t len);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
@@ -82,6 +81,5 @@ void	ft_putptr_count(size_t ptr, int *count);
 void	ft_puthex_count(unsigned int hex, int *count, char x_or_x);
 int		ft_printf(const char *format, ...);
 long	ft_atol(const char *str);
-void	skip_whitespace(char *str);
 
 #endif
