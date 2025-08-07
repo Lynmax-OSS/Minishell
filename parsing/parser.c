@@ -14,31 +14,28 @@
 
 t_cmd	*parse_token(char **tokens)
 {
-	t_cmd	*head;
-	t_cmd	*curr;
-	t_cmd	*node;
+	t_data	d;
 	int		i;
 
 	i = 0;
-	head = NULL;
-	curr = NULL;
+	d.head = NULL;
+	d.curr = NULL;
 	while (tokens[i])
 	{
-		node = malloc(sizeof(t_cmd));
-		if (!node)
-			return (NULL);
-		node->args = collect_agrs();
-		node->redir = NULL;
-		node->next = NULL;
+		d.node = malloc(sizeof(t_cmd));
+		d.node->args = collect_agrs(tokens, i);
+		d.node->redir = NULL;
+		d.node->next = NULL;
 		while (tokens[i] && is_redir(tokens[i]))
-			node->redir = add_redir();
+			d.node->redir = add_redir(d.node->redir,
+					ft_strdup(tokens[i++]), ft_strdup(tokens[i++]));
 		if (tokens[i] && ft_strcmp(tokens[i], "|") == 0)
 			i++;
-		if (!head)
-			head = node;
+		if (!d.head)
+			d.head = d.node;
 		else
-			curr->next = node;
-		curr = node;
+			d.curr->next = d.node;
+		d.curr = d.node;
 	}
-	return (head);
+	return (d.head);
 }
