@@ -21,7 +21,6 @@ char	**tokenizer(char *input)
 	if (!tokens)
 		return (NULL);
 	i = 0;
-	ft_strndup("hello", 5);
 	while (*input)
 	{
 		skip_whitespace(&input);

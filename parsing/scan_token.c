@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-t_cmd	*parse_token(char **tokens)
+t_cmd	*scan_token(char **tokens)
 {
 	t_data	d;
 	int		i;

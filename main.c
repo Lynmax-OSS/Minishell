@@ -12,11 +12,22 @@
 
 #include "minishell.h"
 
+void	print_tokens(char **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens && tokens[i])
+	{
+		printf("Token[%d]: %s\n", i, tokens[i]);
+		i++;
+	}
+}
+
 int	main(void)
 {
 	char	*line;
 	char	**tokens;
-	int		i;
 
 	while (1)
 	{
@@ -26,12 +37,7 @@ int	main(void)
 		if (*line)
 			add_history(line);
 		tokens = tokenizer(line);
-		i = 0;
-		while (tokens && tokens[i])
-		{
-			printf("Token[%d]: %s\n", i, tokens[i]);
-			i++;
-		}
+		print_tokens(tokens);
 		free(line);
 	}
 	printf("exit\n");
