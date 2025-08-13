@@ -16,14 +16,16 @@ OBJ_DIR = objs
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g3 -libreadline -I$(HEADER)
+CFLAGS = -Wall -Wextra -Werror -g3
 
-HEADER = minishell
 
 SRCS =	main.c\
-		parsing/tokenizer/tokenizer.c\
-		parsing/tokenizer/token_utils.c\
-		parsing/tokenizer/token_init.c\
+		parsing/tokenizer.c\
+		parsing/token_utils.c\
+		parsing/general_utils.c\
+# 		parsing/parser.c\
+# 		parsing/parser_utils.c\
+
 
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJ_DIR)/%.o)
 
@@ -33,10 +35,15 @@ $(OBJ_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
+LIBFT = libft/libft.a
+
+$(LIBFT) :
+	@make -C libft
+
 all: $(Name)
 
 $(Name): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
