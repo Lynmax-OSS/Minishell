@@ -12,14 +12,15 @@
 
 #include "minishell.h"
 
-void	print_tokens(char **tokens)
+void	print_tokens(t_token *tokens, int count)
 {
 	int	i;
 
 	i = 0;
-	while (tokens && tokens[i])
+	while (i < count)
 	{
-		printf("Token[%d]: %s\n", i, tokens[i]);
+		printf("Token[%d]: value=\"%s\", type=%d\n",
+				i, tokens[i].value, tokens[i].type);
 		i++;
 	}
 }
@@ -27,8 +28,10 @@ void	print_tokens(char **tokens)
 int	main(void)
 {
 	char	*line;
-	char	**tokens;
+	int		count;
+	t_token	*tokens;
 
+	count = 0;
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -36,8 +39,11 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		tokens = tokenizer(line);
-		print_tokens(tokens);
+		tokens = tokenizer(line, &count);
+		print_tokens(tokens, count);
+		while (count--)
+			free(tokens[count].value);
+		free(tokens);
 		free(line);
 	}
 	printf("exit\n");

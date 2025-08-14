@@ -22,40 +22,26 @@
 # include <readline/history.h>
 # include "libft/libft.h"
 
-typedef struct s_redir
+typedef enum e_toktype
 {
-	char			*type;
-	char			*target;
-	struct s_redir	*next;
-}	t_redir;
+	TOK_WORD,
+	TOK_PIPE,
+	TOK_REDIR_IN,
+	TOK_REDIR_OUT,
+	TOK_DREDIR_IN,
+	TOK_DREDIR_OUT
+} t_toktype;
 
-typedef struct s_cmd
+typedef struct s_token
 {
-	char			**args;
-	t_redir			*redir;
-	struct s_cmd	*next;
-}	t_cmd;
+	char		*value;
+	t_toktype	type;
+} t_token;
 
-typedef struct s_data
-{
-	int		start;
-	int		len;
-	char	**args;
-	t_cmd	*head;
-	t_cmd	*curr;
-	t_cmd	*node;
-}	t_data;
-
-char	*extract_regular_token(char **line);
-char	*extract_operator(char **line);
-char	*extract_double_quote(char **line);
-char	*extract_single_quote(char **line);
 int		is_whitespace(char c);
 int		is_operator(char c);
 int		is_redir(const char *s);
 void	skip_whitespace(char **line);
-char	**tokenizer(char *input);
-char	**collect_args(char **tokens, int *i);
-t_redir	*add_redir(t_redir *list, char *type, char *target);
+t_token	*tokenizer(char *input, int *count);
 
 #endif
