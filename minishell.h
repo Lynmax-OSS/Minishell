@@ -38,10 +38,27 @@ typedef struct s_token
 	t_toktype	type;
 } t_token;
 
+typedef struct s_redir
+{
+	char			*type;
+	char			*target;
+	struct s_redir	*next;
+} t_redir;
+
+typedef struct	s_cmd
+{
+	char			**args;
+	t_redir			*redir;
+	struct s_cmd	*next;
+} t_cmd;
+
 int		is_whitespace(char c);
 int		is_operator(char c);
 int		is_redir(const char *s);
 void	skip_whitespace(char **line);
+char	*extract_word(char **line);
+char	*extract_operator_str(char **line);
+char	*extract_quoted(char **line, char quote);
 t_token	*tokenizer(char *input, int *count);
 
 #endif
