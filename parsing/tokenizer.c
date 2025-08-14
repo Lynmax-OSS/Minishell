@@ -27,37 +27,22 @@ static t_toktype	classify_operator(char *s)
 	return (TOK_WORD);
 }
 
-static char	*extract_word(char **line)
+static void	extract_and_assign(t_token *tokens, char **cursor, int i)
 {
-	char	*start;
-	int		len;
-
-	start = *line;
-	len = 0;
-	while (**line && !is_whitespace(**line) && !is_operator(**line))
+	if (**cursor == '\'' || **cursor == '"')
 	{
-		(*line)++;
-		len++;
+		tokens[i].value = extract_quoted(cursor, **cursor);
+		tokens[i].type = TOK_WORD;
 	}
-	return (ft_strndup(start, len));
-}
-
-static char	*extract_operator_str(char **line)
-{
-	char	*op;
-
-	if ((**line == '<' && *(*line + 1) == '<')
-		|| (**line == '>' && *(*line + 1) == '>'))
+	else if (is_operator(**cursor))
 	{
-		op = ft_strndup(*line, 2);
-		*line += 2;
-		return (op);
+		tokens[i].value = extract_operator_str(cursor);
+		tokens[i].type = classify_operator(tokens[i].value);
 	}
 	else
 	{
-		op = ft_strndup(*line, 1);
-		(*line)++;
-		return (op);
+		tokens[i].value = extract_word(cursor);
+		tokens[i].type = TOK_WORD;
 	}
 }
 
@@ -65,24 +50,17 @@ t_token	*tokenizer(char *input, int *count)
 {
 	t_token	*tokens;
 	int		i;
+	char	*cursor;
 
+	cursor = input;
 	tokens = malloc(sizeof(t_token) * MAX_TOKENS);
 	i = 0;
-	while (*input)
+	while (*cursor)
 	{
-		skip_whitespace(&input);
-		if (!*input)
+		skip_whitespace(&cursor);
+		if (!*cursor)
 			break ;
-		if (is_operator(*input))
-		{
-			tokens[i].value = extract_operator_str(&input);
-			tokens[i].type = classify_operator(tokens[i].value);
-		}
-		else
-		{
-			tokens[i].value = extract_word(&input);
-			tokens[i].type = TOK_WORD;
-		}
+		extract_and_assign(tokens, &cursor, i);
 		i++;
 	}
 	*count = i;
