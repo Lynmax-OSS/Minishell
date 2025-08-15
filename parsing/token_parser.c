@@ -72,7 +72,7 @@ static t_cmd	*cmd_list_init(t_token *tokens, int *i, int count)
 	node->redir = NULL;
 	node->next = NULL;
 	while (*i < count && tokens[*i].type != TOK_PIPE
-			&& tokens[*i].type != TOK_WORD)
+		&& tokens[*i].type != TOK_WORD)
 	{
 		type = ft_strdup(tokens[(*i)++].value);
 		if (*i < count)

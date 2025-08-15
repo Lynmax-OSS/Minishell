@@ -20,7 +20,7 @@ void	print_tokens(t_token *tokens, int count)
 	while (i < count)
 	{
 		printf("Token[%d]: value=\"%s\", type=%d\n",
-				i, tokens[i].value, tokens[i].type);
+			i, tokens[i].value, tokens[i].type);
 		i++;
 	}
 }
