@@ -68,7 +68,7 @@ static t_cmd	*cmd_list_init(t_token *tokens, int *i, int count)
 	node = malloc(sizeof(t_cmd));
 	if (!node)
 		return (NULL);
-	node->args = collect_args();
+	node->args = collect_args(tokens, i, count);
 	node->redir = NULL;
 	node->next = NULL;
 	while (*i < count && tokens[*i].type != TOK_PIPE
