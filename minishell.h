@@ -18,6 +18,13 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include <stddef.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <string.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft/libft.h"
@@ -52,6 +59,8 @@ typedef struct	s_cmd
 	struct s_cmd	*next;
 } t_cmd;
 
+
+//parsing
 int		is_whitespace(char c);
 int		is_operator(char c);
 int		is_redir(const char *s);
@@ -60,5 +69,19 @@ char	*extract_word(char **line);
 char	*extract_operator_str(char **line);
 char	*extract_quoted(char **line, char quote);
 t_token	*tokenizer(char *input, int *count);
+t_cmd	*token_parser(t_token *tokens, int count);
+
+//execution
+int		execute_commands(t_cmd *head, char **envp);
+int		is_builtin(char **args);
+int		run_builtin(char **args);
+int		apply_redirections(t_redir *redir);
+int		run_external(char **args, char **envp);
+void    wait_all_children(int *status);
+
+//builtins
+int		ft_echo(char **args);
+int		ft_exit(char **args);
+int		ft_pwd(void);
 
 #endif
