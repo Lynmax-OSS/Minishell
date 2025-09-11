@@ -7,7 +7,6 @@ int ft_echo(char **args)
 {
     int i;
     int newline;
-    int j;
 
     i = 1;
     newline = 1;
