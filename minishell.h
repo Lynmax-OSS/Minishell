@@ -16,6 +16,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <cstddef>
 # include <stdbool.h>
 # include <stddef.h>
 # include <unistd.h>
@@ -70,6 +71,7 @@ char	*extract_operator_str(char **line);
 char	*extract_quoted(char **line, char quote);
 t_token	*tokenizer(char *input, int *count);
 t_cmd	*token_parser(t_token *tokens, int count);
+int		validate_syntax(t_token *tokens, int count);
 
 //execution
 int		execute_commands(t_cmd *head, char **envp);

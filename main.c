@@ -30,6 +30,7 @@ int	main(void)
 	char	*line;
 	int		count;
 	t_token	*tokens;
+	t_cmd	*cmd_line;
 
 	count = 0;
 	while (1)
@@ -40,7 +41,8 @@ int	main(void)
 		if (*line)
 			add_history(line);
 		tokens = tokenizer(line, &count);
-		print_tokens(tokens, count);
+		cmd_line = token_parser(tokens, count);
+		execute_commands(cmd_line, );
 		while (count--)
 			free(tokens[count].value);
 		free(tokens);

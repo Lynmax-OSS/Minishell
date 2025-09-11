@@ -94,6 +94,8 @@ t_cmd	*token_parser(t_token *tokens, int count)
 	i = 0;
 	head = NULL;
 	curr = NULL;
+	if (validate_syntax(tokens, count) == -1)
+		return (NULL);
 	while (i < count)
 	{
 		node = cmd_list_init(tokens, &i, count);
