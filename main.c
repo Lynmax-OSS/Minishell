@@ -25,6 +25,36 @@ void	print_tokens(t_token *tokens, int count)
 	}
 }
 
+static void print_redirs(t_redir *redir)
+{
+    while (redir)
+    {
+        printf("    redir: type=%s, target=%s\n",
+            redir->type, redir->target);
+        redir = redir->next;
+    }
+}
+
+void print_cmd_list(t_cmd *cmds)
+{
+    int j;
+
+    while (cmds)
+    {
+        j = 0;
+        printf("Command:\n");
+        while (cmds->args && cmds->args[j])
+        {
+            printf("    arg[%d]: %s\n", j, cmds->args[j]);
+            j++;
+        }
+        print_redirs(cmds->redir);
+        cmds = cmds->next;
+        if (cmds)
+            printf("---- pipe ----\n");
+    }
+}
+
 int	main(void)
 {
 	char	*line;
@@ -42,7 +72,8 @@ int	main(void)
 			add_history(line);
 		tokens = tokenizer(line, &count);
 		cmd_line = token_parser(tokens, count);
-		execute_commands(cmd_line, );
+		if (cmd_line)
+			print_cmd_list(cmd_line);
 		while (count--)
 			free(tokens[count].value);
 		free(tokens);
