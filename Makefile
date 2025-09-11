@@ -22,12 +22,13 @@ SRCS =	main.c \
 		parsing/token_parser.c \
 		parsing/general_utils_func.c \
 		parsing/extractor_func.c \
-		execution/builtins.c \
-		execution/execution.c \
-		execution/redirection.c \
-		execution/run_builtin.c \
-		execution/run_external.c \
-		execution/wait_utils.c
+		parsing/syntax_validator.c\
+# 		execution/builtins.c \
+# 		execution/execution.c \
+# 		execution/redirection.c \
+# 		execution/run_builtin.c \
+# 		execution/run_external.c \
+# 		execution/wait_utils.c
 
 OBJ_DIR = objs
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
