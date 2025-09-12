@@ -23,6 +23,8 @@ SRCS =	main.c \
 		parsing/general_utils_func.c \
 		parsing/extractor_func.c \
 		parsing/syntax_validator.c\
+		parsing/init_env.c\
+		parsing/expand_tokens.c\
 # 		execution/builtins.c \
 # 		execution/execution.c \
 # 		execution/redirection.c \
