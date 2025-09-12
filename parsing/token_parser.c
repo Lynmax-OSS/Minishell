@@ -19,12 +19,12 @@ static t_redir	*add_redir(t_redir *list, char *type, char *target)
 
 	new = malloc(sizeof(t_redir));
 	if (!new)
-		return (NULL);
+		return (list);
 	new->type = type;
 	new->target = target;
 	new->next = NULL;
 	if (!list)
-		return (NULL);
+		return (new);
 	tmp = list;
 	while (tmp->next)
 		tmp = tmp->next;
@@ -71,15 +71,19 @@ static t_cmd	*cmd_list_init(t_token *tokens, int *i, int count)
 	node->args = collect_args(tokens, i, count);
 	node->redir = NULL;
 	node->next = NULL;
-	while (*i < count && tokens[*i].type != TOK_PIPE
-		&& tokens[*i].type != TOK_WORD)
+	while (*i < count && tokens[*i].type != TOK_PIPE)
 	{
-		type = ft_strdup(tokens[(*i)++].value);
-		if (*i < count)
+		if (is_redir(tokens[*i].value))
 		{
-			target = ft_strdup(tokens[(*i)++].value);
-			node->redir = add_redir(node->redir, type, target);
+			type = ft_strdup(tokens[(*i)++].value);
+			if (*i < count && tokens[*i].type == TOK_WORD)
+			{
+				target = ft_strdup(tokens[(*i)++].value);
+				node->redir = add_redir(node->redir, type, target);
+			}
 		}
+		else
+			(*i)++;
 	}
 	return (node);
 }

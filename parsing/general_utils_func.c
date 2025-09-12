@@ -30,6 +30,6 @@ void	skip_whitespace(char **line)
 
 int	is_redir(const char *s)
 {
-	return (!ft_strncmp(s, ">", 2) || ft_strncmp(s, "<", 2)
+	return (!ft_strncmp(s, ">", 2) || !ft_strncmp(s, "<", 2)
 		|| !ft_strncmp(s, ">>", 3) || !ft_strncmp(s, "<<", 3));
 }

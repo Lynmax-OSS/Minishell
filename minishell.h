@@ -59,6 +59,22 @@ typedef struct	s_cmd
 	struct s_cmd	*next;
 } t_cmd;
 
+typedef struct	s_env
+{
+	char		*key;
+	char		*value;
+	struct s_env *next;
+}	t_env;
+
+typedef struct	s_init_env
+{
+	t_env	*head;
+	t_env	*cur;
+	char	*eq;
+	char	*key;
+	char	*value;
+}	t_init_env;
+
 
 //parsing
 int		is_whitespace(char c);
@@ -71,6 +87,8 @@ char	*extract_quoted(char **line, char quote);
 t_token	*tokenizer(char *input, int *count);
 t_cmd	*token_parser(t_token *tokens, int count);
 int		validate_syntax(t_token *tokens, int count);
+t_env	*init_env(char **envp);
+void	expand_tokens(t_token *tokens, int count, t_env *env);
 
 //execution
 int		execute_commands(t_cmd *head, char **envp);
