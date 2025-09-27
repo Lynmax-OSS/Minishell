@@ -25,48 +25,51 @@
 // 	}
 // }
 
-static void print_redirs(t_redir *redir)
-{
-	while (redir)
-	{
-		printf("    redir: type=%s, target=%s\n",
-			redir->type, redir->target);
-		redir = redir->next;
-	}
-}
+// static void print_redirs(t_redir *redir)
+// {
+// 	while (redir)
+// 	{
+// 		printf("    redir: type=%s, target=%s\n",
+// 			redir->type, redir->target);
+// 		redir = redir->next;
+// 	}
+// }
 
-void print_cmd_list(t_cmd *cmds)
-{
-	int j;
+// void print_cmd_list(t_cmd *cmds)
+// {
+// 	int j;
 
-	while (cmds)
-	{
-		j = 0;
-		printf("Command:\n");
-		while (cmds->args && cmds->args[j])
-		{
-			printf("    arg[%d]: %s\n", j, cmds->args[j]);
-			j++;
-		}
-		print_redirs(cmds->redir);
-		cmds = cmds->next;
-		if (cmds)
-			printf("---- pipe ----\n");
-	}
-}
+// 	while (cmds)
+// 	{
+// 		j = 0;
+// 		printf("Command:\n");
+// 		while (cmds->args && cmds->args[j])
+// 		{
+// 			printf("    arg[%d]: %s\n", j, cmds->args[j]);
+// 			j++;
+// 		}
+// 		print_redirs(cmds->redir);
+// 		cmds = cmds->next;
+// 		if (cmds)
+// 			printf("---- pipe ----\n");
+// 	}
+// }
 
-int	main(int ac, char ** av, char **envp)
+int	g_exit_code = 0;
+
+int	main(int ac, char **av, char **envp)
 {
-	(void)ac;
-	(void)av;
 	char	*line;
 	int		count;
 	t_token	*tokens;
 	t_cmd	*cmd_line;
 	t_env	*env;
 
+	(void)ac;
+	(void)av;
 	count = 0;
 	env = init_env(envp);
+	setup_signal();
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -77,14 +80,18 @@ int	main(int ac, char ** av, char **envp)
 		tokens = tokenizer(line, &count);
 		expand_tokens(tokens, count, env);
 		cmd_line = token_parser(tokens, count);
-		print_cmd_list(cmd_line);
+		if (cmd_line)
+			execution(cmd_line, &env);
+		// print_cmd_list(cmd_line);
 		while (count--)
 			free(tokens[count].value);
 		free(tokens);
 		free(line);
 	}
+	cleanup_shell(env);
 	printf("exit\n");
 	return (0);
+	// return (g_exit_code);
 }
 
 

@@ -21,6 +21,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <sys/wait.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <string.h>
@@ -37,36 +38,36 @@ typedef enum e_toktype
 	TOK_REDIR_OUT,
 	TOK_DREDIR_IN,
 	TOK_DREDIR_OUT
-} t_toktype;
+}	t_toktype;
 
 typedef struct s_token
 {
 	char		*value;
 	t_toktype	type;
-} t_token;
+}	t_token;
 
 typedef struct s_redir
 {
 	char			*type;
 	char			*target;
 	struct s_redir	*next;
-} t_redir;
+}	t_redir;
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
 	char			**args;
 	t_redir			*redir;
 	struct s_cmd	*next;
-} t_cmd;
+}	t_cmd;
 
-typedef struct	s_env
+typedef struct s_env
 {
-	char		*key;
-	char		*value;
-	struct s_env *next;
+	char			*key;
+	char			*value;
+	struct s_env	*next;
 }	t_env;
 
-typedef struct	s_init_env
+typedef struct s_init_env
 {
 	t_env	*head;
 	t_env	*cur;
@@ -75,6 +76,16 @@ typedef struct	s_init_env
 	char	*value;
 }	t_init_env;
 
+typedef struct s_pipe
+{
+	int		num_commands;
+	int		**pipes;
+	int		*pids;
+	t_env	*env;
+	int		commands_executed;
+}	t_pipe;
+
+extern int	g_exit_code;
 
 //parsing
 int		is_whitespace(char c);
@@ -91,16 +102,51 @@ t_env	*init_env(char **envp);
 void	expand_tokens(t_token *tokens, int count, t_env *env);
 
 //execution
-int		execute_commands(t_cmd *head, char **envp);
-int		is_builtin(char **args);
-int		run_builtin(char **args);
-int		apply_redirections(t_redir *redir);
-int		run_external(char **args, char **envp);
-void    wait_all_children(int *status);
+int		execution(t_cmd *head, t_env **env);
 
-//builtins
+///utils
+char	*get_env_value(t_env *env, char *key);
+void	free_cmd_list(t_cmd *cmd);
+void	cleanup_shell(t_env *env);
+
+///pipes
+int		execution_pipeline(t_cmd *head, t_env *env);
+void	init_pipeline(t_cmd *head, t_pipe *data);
+int		setup_and_fork_command(t_cmd *cmd, int cmd_index, t_pipe *data);
+void	cleanup_pipes(int **pipes, int num_commands);
+void	close_all_pipes(int **pipes, int num_pipes);
+
+///wait children
+int		wait_all_children(int *pids, int num_children);
+
+///redirection
+int		apply_redirections(t_redir *redir, t_env *env);
+int		handle_single_redirection(t_redir *redir, t_env *env);
+int		create_heredoc(char *delimiter, t_env *env);
+char	*expand_heredoc_line(char *line, t_env *env);
+
+///builtins
+int		is_builtin(char **args);
+int		run_builtin(char **args, t_env **env);
 int		ft_echo(char **args);
-int		ft_exit(char **args);
 int		ft_pwd(void);
+int		ft_env(t_env *env);
+int		ft_exit(char **args, t_env **env);
+int		ft_cd(char **args, t_env **env);
+int		ft_unset(char **args, t_env **env);
+int		ft_export(char **args, t_env **env);
+void	print_sorted_variables(t_env *env);
+void	update_env_variable(t_env **env, char *key, char *value);
+
+///external
+int		run_external(char **args, t_env *env);
+char	**convert_env_to_array(t_env *env);
+int		execute_and_cleanup(char *cmd_path, char **args, char **env_array);
+void	free_string_array(char **array);
+char	*ft_strjoin3(char *s1, char *s2, char *s3);
+
+///signal
+void	handle_interrupt(int sig);
+void	setup_signals(void);
 
 #endif
