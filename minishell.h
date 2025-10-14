@@ -44,6 +44,7 @@ typedef struct s_token
 {
 	char		*value;
 	t_toktype	type;
+	int			quoted;
 }	t_token;
 
 typedef struct s_redir
@@ -124,6 +125,7 @@ int		apply_redirections(t_redir *redir, t_env *env);
 int		handle_single_redirection(t_redir *redir, t_env *env);
 int		create_heredoc(char *delimiter, t_env *env);
 char	*expand_heredoc_line(char *line, t_env *env);
+int		setup_redirection(int cmd_index, t_pipe *data);
 
 ///builtins
 int		is_builtin(char **args);
@@ -137,6 +139,8 @@ int		ft_unset(char **args, t_env **env);
 int		ft_export(char **args, t_env **env);
 void	print_sorted_variables(t_env *env);
 void	update_env_variable(t_env **env, char *key, char *value);
+int		valid_identifier(char *arg);
+
 
 ///external
 int		run_external(char **args, t_env *env);

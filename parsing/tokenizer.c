@@ -27,17 +27,54 @@ static t_toktype	classify_operator(char *s)
 	return (TOK_WORD);
 }
 
+// static void	extract_and_assign(t_token *tokens, char **cursor, int i)
+// {
+// 	if (is_operator(**cursor))
+// 	{
+// 		tokens[i].value = extract_operator_str(cursor);
+// 		tokens[i].type = classify_operator(tokens[i].value);
+// 	}
+// 	else
+// 	{
+// 		tokens[i].value = extract_word(cursor);
+// 		tokens[i].type = TOK_WORD;
+// 	}
+// }
+
 static void	extract_and_assign(t_token *tokens, char **cursor, int i)
 {
-	if (**cursor == '\'' || **cursor == '"')
-	{
-		tokens[i].value = extract_quoted(cursor, **cursor);
-		tokens[i].type = TOK_WORD;
-	}
-	else if (is_operator(**cursor))
+	char	*save_pos;
+	char	*before;
+
+	tokens[i].quoted = 0;
+	save_pos = *cursor;
+	if (is_operator(**cursor))
 	{
 		tokens[i].value = extract_operator_str(cursor);
 		tokens[i].type = classify_operator(tokens[i].value);
+	}
+	else if (**cursor == '\'' && !is_operator(*(*cursor + 1)))
+	{
+		tokens[i].value = extract_quoted(cursor, **cursor);
+		tokens[i].type = TOK_WORD;
+		tokens[i].quoted = 1;
+	}
+	else if (**cursor == '"' && !is_operator(*(*cursor + 1)))
+	{
+		before = *cursor;
+		tokens[i].value = extract_quoted(cursor, **cursor);
+		if (**cursor && !is_whitespace(**cursor) && !is_operator(**cursor))
+		{
+			free(tokens[i].value);
+			*cursor = before;
+			tokens[i].value = extract_word(cursor);
+			tokens[i].type = TOK_WORD;
+		}
+		else
+		{
+			tokens[i].type = TOK_WORD;
+			tokens[i].quoted = 2;
+		}
 	}
 	else
 	{

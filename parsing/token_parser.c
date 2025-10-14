@@ -35,27 +35,35 @@ static t_redir	*add_redir(t_redir *list, char *type, char *target)
 static char	**collect_args(t_token *tokens, int *i, int count)
 {
 	char	**args;
-	int		start;
-	int		len;
+	int		arg_count;
+	int		j;
 
-	start = *i;
-	len = 0;
-	while (*i < count && tokens[*i].type == TOK_WORD)
+	arg_count = 0;
+	j = *i;
+	while (j < count && tokens[j].type != TOK_PIPE)
 	{
-		len++;
-		(*i)++;
+		if (tokens[j].type == TOK_WORD
+			&& ((j == *i) || !is_redir(tokens[j - 1].value)))
+		{
+			arg_count++;
+		}
+		j++;
 	}
-	args = malloc(sizeof(char *) * (len + 1));
+	args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!args)
 		return (NULL);
-	len = 0;
-	while (start < *i)
+	arg_count = 0;
+	while (*i < count && tokens[*i].type != TOK_PIPE)
 	{
-		args[len] = ft_strdup(tokens[start].value);
-		len++;
-		start++;
+		if (tokens[*i].type == TOK_WORD
+			&& (*i == 0 || !is_redir(tokens[*i - 1].value)))
+		{
+			args[arg_count] = ft_strdup(tokens[*i].value);
+			arg_count++;
+		}
+		(*i)++;
 	}
-	args[len] = NULL;
+	args[arg_count] = NULL;
 	return (args);
 }
 
@@ -64,13 +72,16 @@ static t_cmd	*cmd_list_init(t_token *tokens, int *i, int count)
 	t_cmd	*node;
 	char	*type;
 	char	*target;
+	int		start;
 
 	node = malloc(sizeof(t_cmd));
 	if (!node)
 		return (NULL);
+	start = *i;
 	node->args = collect_args(tokens, i, count);
 	node->redir = NULL;
 	node->next = NULL;
+	*i = start;
 	while (*i < count && tokens[*i].type != TOK_PIPE)
 	{
 		if (is_redir(tokens[*i].value))
@@ -83,7 +94,9 @@ static t_cmd	*cmd_list_init(t_token *tokens, int *i, int count)
 			}
 		}
 		else
+		{
 			(*i)++;
+		}
 	}
 	return (node);
 }

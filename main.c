@@ -64,12 +64,13 @@ int	main(int ac, char **av, char **envp)
 	t_token	*tokens;
 	t_cmd	*cmd_line;
 	t_env	*env;
+	int		exec_status;
 
 	(void)ac;
 	(void)av;
-	count = 0;
+	// count = 0;
 	env = init_env(envp);
-	setup_signal();
+	setup_signals();
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -77,21 +78,30 @@ int	main(int ac, char **av, char **envp)
 			break ;
 		if (*line)
 			add_history(line);
+		count = 0; //
 		tokens = tokenizer(line, &count);
+		if (!tokens) // safety check
+		{
+			free(line);
+			continue ;
+		}
 		expand_tokens(tokens, count, env);
 		cmd_line = token_parser(tokens, count);
 		if (cmd_line)
-			execution(cmd_line, &env);
-		// print_cmd_list(cmd_line);
-		while (count--)
-			free(tokens[count].value);
+			exec_status = execution(cmd_line, &env);
+		else
+			exec_status = 0;
+		g_exit_code = exec_status;;
+		// while (count--)
+		// 	free(tokens[count].value);
+		while (count > 0) // safer cleanup
+			free(tokens[--count].value);
 		free(tokens);
 		free(line);
 	}
 	cleanup_shell(env);
 	printf("exit\n");
-	return (0);
-	// return (g_exit_code);
+	return (g_exit_code);
 }
 
 

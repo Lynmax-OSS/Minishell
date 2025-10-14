@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 19:56:54 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/25 11:29:37 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:28:30 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	valid_identifier(char *arg)
 {
 	int	i;
 
-	if (!arg || !ft_isalpha(arg[0]) && arg[0] != '_')
+	if (!arg || (!ft_isalpha(arg[0]) && arg[0] != '_'))
 		return (0);
 	i = 1;
 	while (arg[i])

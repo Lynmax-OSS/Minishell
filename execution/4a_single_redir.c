@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 09:18:41 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 16:01:23 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/10 03:20:52 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	handle_single_redirection(t_redir *redir, t_env *env)
 	int	fd;
 
 	fd = -1;
+	// fprintf(stderr, "DEBUG: Handling redirection type=%s target=%s\n", redir->type, redir->target);
 	if (ft_strcmp(redir->type, "<") == 0)
 		fd = open_input_file(redir->target);
 	else if (ft_strcmp(redir->type, ">") == 0)
@@ -80,8 +81,9 @@ int	handle_single_redirection(t_redir *redir, t_env *env)
 		fd = open_output_file(redir->target, 1);
 	else if (ft_strcmp(redir->type, "<<") == 0)
 		fd = create_heredoc(redir->target, env);
+	// fprintf(stderr, "DEBUG: Redirection result: fd=%d\n", fd);
 	if (fd == -1)
-		return (-1);
+		return (1);
 	if (ft_strcmp(redir->type, "<") == 0 || ft_strcmp(redir->type, "<<") == 0)
 		return (apply_input_redirection(fd));
 	else

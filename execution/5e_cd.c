@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 14:43:20 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 12:14:28 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/10 00:51:59 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,21 @@ int	ft_cd(char **args, t_env **env)
 	char	*path;
 	int		should_print;
 	int		ret;
+	int		arg_count;
 
+	arg_count = 0;
+	while (args[arg_count])
+		arg_count++;
+	if (arg_count > 2)
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
+	if (arg_count == 2 && ft_strchr(args[1], ' ') != NULL)
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
 	{

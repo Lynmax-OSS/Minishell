@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:09:14 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/27 14:40:52 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:44:42 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	ft_echo(char **args)
 		i++;
 	}
 	print_echo(args, i, newline);
+	g_exit_code = 0;
 	return (0);
 }
 

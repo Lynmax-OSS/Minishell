@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 15:57:36 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 16:04:05 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:28:11 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ static int	find_var_end(char *line, int start)
 	return (i);
 }
 
-static char	*join_and_free(char *s1, char *s2)
-{
-	char	*result;
+// static char	*join_and_free(char *s1, char *s2)
+// {
+// 	char	*result;
 
-	result = ft_strjoin(s1, s2);
-	free(s1);
-	return (result);
-}
+// 	result = ft_strjoin(s1, s2);
+// 	free(s1);
+// 	return (result);
+// }
 
 static char	*join_char(char *str, char c)
 {
@@ -58,11 +58,33 @@ static char	*join_char(char *str, char c)
 	return (result);
 }
 
+static char	*handle_variable(char *new, char *line, int i, int j, t_env *env)
+{
+	char	*var_name;
+	char	*var_value;
+	char	*temp;
+
+	var_name = ft_substr(line, i + 1, j - (i + 1));
+	if (!var_name)
+		return (new);
+
+	var_value = get_env_value(env, var_name);
+	free(var_name);
+
+	if (var_value)
+	{
+		temp = ft_strjoin(new, var_value);
+		free(new);
+		new = temp;
+	}
+	return (new);
+}
+
 char	*expand_heredoc_line(char *line, t_env *env)
 {
 	char	*new;
-	char	*var;
-	char	*value;
+	// char	*var;
+	// char	*value;
 	int		i;
 	int		j;
 

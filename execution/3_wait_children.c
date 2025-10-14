@@ -6,9 +6,11 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 08:29:39 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/24 12:21:58 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/10 03:00:17 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../minishell.h"
 
 int	wait_all_children(int *pids, int num_children)
 {
@@ -18,6 +20,7 @@ int	wait_all_children(int *pids, int num_children)
 
 	if (!pids || num_children <= 0)
 		return (0);
+	
 	i = 0;
 	exit_status = 0;
 	while (i < num_children)
@@ -25,6 +28,7 @@ int	wait_all_children(int *pids, int num_children)
 		if (pids[i] > 0)
 		{
 			waitpid(pids[i], &status, 0);
+			// Always update, so last command's status wins
 			if (WIFEXITED(status))
 				exit_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))

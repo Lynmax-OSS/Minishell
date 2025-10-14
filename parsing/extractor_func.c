@@ -34,17 +34,37 @@ char	*extract_quoted(char **line, char quote)
 
 char	*extract_word(char **line)
 {
+	char	*result;
+	char	*part;
+	char	*temp;
 	char	*start;
 	int		len;
 
-	start = *line;
-	len = 0;
+	result = ft_strdup("");
 	while (**line && !is_whitespace(**line) && !is_operator(**line))
 	{
-		(*line)++;
-		len++;
+		if (**line == '\'' || **line == '"')
+		{
+			part = extract_quoted(line, **line);
+		}
+		else
+		{
+			start = *line;
+			len = 0;
+			while (**line && !is_whitespace(**line) && !is_operator(**line) 
+				   && **line != '\'' && **line != '"')
+			{
+				len++;
+				(*line)++;
+			}
+			part = ft_strndup(start, len);
+		}
+		temp = result;
+		result = ft_strjoin(result, part);
+		free(temp);
+		free(part);
 	}
-	return (ft_strndup(start, len));
+	return (result);
 }
 
 char	*extract_operator_str(char **line)

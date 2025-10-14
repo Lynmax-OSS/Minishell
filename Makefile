@@ -25,12 +25,32 @@ SRCS =	main.c \
 		parsing/syntax_validator.c\
 		parsing/init_env.c\
 		parsing/expand_tokens.c\
-# 		execution/builtins.c \
-# 		execution/execution.c \
-# 		execution/redirection.c \
-# 		execution/run_builtin.c \
-# 		execution/run_external.c \
-# 		execution/wait_utils.c
+		execution/1_execution.c\
+		execution/1a_exec_utils.c\
+		execution/2_pipes.c\
+		execution/2a_pipe_setup.c\
+		execution/2b_pipe_setup_fork.c\
+		execution/2c_pipe_utils.c\
+		execution/3_wait_children.c\
+		execution/4_redirection.c\
+		execution/4a_single_redir.c\
+		execution/4b_heredoc.c\
+		execution/4c_expand.c\
+		execution/5_builtin.c\
+		execution/5a_echo.c\
+		execution/5b_pwd.c\
+		execution/5c_env.c\
+		execution/5d_exit.c\
+		execution/5e_cd.c\
+		execution/5f_unset.c\
+		execution/5g_export.c\
+		execution/5g1_print_sorted.c\
+		execution/5g2_update_env.c\
+		execution/6_run_external.c\
+		execution/6a_env_convert.c\
+		execution/6b_exec_clean.c\
+		execution/6c_external_utils.c\
+		execution/7_signals.c\
 
 OBJ_DIR = objs
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)

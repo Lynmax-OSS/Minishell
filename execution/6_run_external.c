@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:57:26 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 19:36:49 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/10 05:04:17 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,58 @@ int	run_external(char **args, t_env *env)
 {
 	char	*cmd_path;
 	char	**env_array;
+	int		status;
+	struct stat	path_stat;
 
 	if (!args || !args[0])
 		return (1);
+	if (ft_strchr(args[0], '/') && stat(args[0], &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(args[0], STDERR_FILENO);
+			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+			return (126);
+		}
+	}
 	cmd_path = find_command_path(args[0], env);
 	if (!cmd_path)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(args[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		return (127);
+		if (ft_strcmp(args[0], "$PWD") == 0)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(args[0], STDERR_FILENO);
+			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+			return (127);
+		}
+		else if (ft_strchr(args[0], '/') && access(args[0], F_OK) == 0)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(args[0], STDERR_FILENO);
+			ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+			return (126);
+		}
+		else if (ft_strchr(args[0], '/'))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(args[0], STDERR_FILENO);
+			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+			return (127);
+		}
+		else
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(args[0], STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			return (127);
+		}
 	}
 	env_array = convert_env_to_array(env);
 	if (!env_array)
 	{
 		free(cmd_path);
-		return (1);
+		return (127);
 	}
 	status = execute_and_cleanup(cmd_path, args, env_array);
 	return (status);

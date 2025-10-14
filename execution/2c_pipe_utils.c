@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 11:06:47 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 12:30:52 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/10 01:11:40 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,16 @@ void	close_all_pipes(int **pipes, int num_pipes)
 {
 	int	i;
 
+	if (!pipes)
+		return ;
 	i = 0;
 	while (i < num_pipes)
 	{
-		close(pipes[i][0]);
-		close(pipes[i][1]);
+		if (pipes[i])
+		{
+			close(pipes[i][0]);
+			close(pipes[i][1]);
+		}
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 20:51:19 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/27 13:18:02 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:18:47 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	handle_interrupt(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write (STDERR_FILENO, "/n", 1);
+		write (STDERR_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();

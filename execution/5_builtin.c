@@ -6,9 +6,11 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 12:22:32 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 17:11:25 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/09 23:31:57 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../minishell.h"
 
 int	is_builtin(char **args)
 {
@@ -31,24 +33,50 @@ int	is_builtin(char **args)
 	return (0);
 }
 
+// int	run_builtin(char **args, t_env **env)
+// {
+// 	if (!args || !args[0])
+// 		return (g_exit_code);
+// 	if (ft_strcmp(args[0], "echo") == 0)
+// 		return (ft_echo(args));
+// 	else if (ft_strcmp(args[0], "cd") == 0)
+// 		return (ft_cd(args, env));
+// 	else if (ft_strcmp(args[0], "pwd") == 0)
+// 		return (ft_pwd());
+// 	else if (ft_strcmp(args[0], "export") == 0)
+// 		return (ft_export(args, env));
+// 	else if (ft_strcmp(args[0], "unset") == 0)
+// 		return (ft_unset(args, env));
+// 	else if (ft_strcmp(args[0], "env") == 0)
+// 		return (ft_env(*env));
+// 	else if (ft_strcmp(args[0], "exit") == 0)
+// 		return (ft_exit(args, env));
+// 	else
+// 		return (g_exit_code);
+// }
+
 int	run_builtin(char **args, t_env **env)
 {
+	int	exit_code;
+
 	if (!args || !args[0])
-		return (1);
+		return (g_exit_code);
 	if (ft_strcmp(args[0], "echo") == 0)
-		return (ft_echo(args));
+		exit_code = ft_echo(args);
 	else if (ft_strcmp(args[0], "cd") == 0)
-		return (ft_cd(args, env));
+		exit_code = ft_cd(args, env);
 	else if (ft_strcmp(args[0], "pwd") == 0)
-		return (ft_pwd());
+		exit_code = ft_pwd();
 	else if (ft_strcmp(args[0], "export") == 0)
-		return (ft_export(args, env));
+		exit_code = ft_export(args, env);
 	else if (ft_strcmp(args[0], "unset") == 0)
-		return (ft_unset(args, env));
+		exit_code = ft_unset(args, env);
 	else if (ft_strcmp(args[0], "env") == 0)
-		return (ft_env(*env));
+		exit_code = ft_env(*env);
 	else if (ft_strcmp(args[0], "exit") == 0)
-		return (ft_exit(args, env));
+		exit_code = ft_exit(args, env);
 	else
-		return (1);
+		exit_code = g_exit_code;
+	g_exit_code = exit_code;
+	return (exit_code);
 }
