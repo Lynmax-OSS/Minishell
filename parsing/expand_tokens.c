@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-static void	process_char(char **result, char c)
+void	process_char(char **result, char c)
 {
 	char	*temp;
 
@@ -21,7 +21,7 @@ static void	process_char(char **result, char c)
 	free(temp);
 }
 
-static void	process_variable(char **result, char **str, t_env *env)
+void	process_variable(char **result, char **str, t_env *env)
 {
 	char	*var_name;
 	char	*var_value;
@@ -72,9 +72,6 @@ static void	handle_expansion(t_token *token, t_env *env, int i)
 void	expand_tokens(t_token *tokens, int count, t_env *env)
 {
 	int		i;
-	char	*expanded;
-	char	*var_name;
-	char	*value;
 
 	i = 0;
 	while (i < count)

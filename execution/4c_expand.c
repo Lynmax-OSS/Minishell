@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4c_expand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 15:57:36 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/09 22:28:11 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/15 17:49:29 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,50 +58,44 @@ static char	*join_char(char *str, char c)
 	return (result);
 }
 
-static char	*handle_variable(char *new, char *line, int i, int j, t_env *env)
+static char	*handle_variable(t_heredoc heredoc, char *line, t_env *env)
 {
 	char	*var_name;
 	char	*var_value;
 	char	*temp;
 
-	var_name = ft_substr(line, i + 1, j - (i + 1));
+	var_name = ft_substr(line, heredoc.i + 1, heredoc.j - (heredoc.i + 1));
 	if (!var_name)
-		return (new);
-
+		return (heredoc.new);
 	var_value = get_env_value(env, var_name);
 	free(var_name);
-
 	if (var_value)
 	{
-		temp = ft_strjoin(new, var_value);
-		free(new);
-		new = temp;
+		temp = ft_strjoin(heredoc.new, var_value);
+		free(heredoc.new);
+		heredoc.new = temp;
 	}
-	return (new);
+	return (heredoc.new);
 }
 
 char	*expand_heredoc_line(char *line, t_env *env)
 {
-	char	*new;
-	// char	*var;
-	// char	*value;
-	int		i;
-	int		j;
+	t_heredoc	heredoc;
 
 	if (!line)
 		return (NULL);
-	new = ft_strdup("");
-	i = 0;
-	while (line && line[i])
+	heredoc.new = ft_strdup("");
+	heredoc.i = 0;
+	while (line && line[heredoc.i])
 	{
-		if (line[i] == '$' && is_valid_var_char(line[i + 1]))
+		if (line[heredoc.i] == '$' && is_valid_var_char(line[heredoc.i + 1]))
 		{
-			j = find_var_end(line, i + 1);
-			new = handle_variable(new, line, i, j, env);
-			i = j;
+			heredoc.j = find_var_end(line, heredoc.i + 1);
+			heredoc.new = handle_variable(heredoc, line, env);
+			heredoc.i = heredoc.j;
 		}
 		else
-			new = join_char(new, line[i++]);
+			heredoc.new = join_char(heredoc.new, line[heredoc.i++]);
 	}
-	return (new);
+	return (heredoc.new);
 }

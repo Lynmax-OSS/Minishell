@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6_run_external.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:57:26 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/10 05:04:17 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/15 17:31:05 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static char	*find_command_path(char *cmd, t_env *env)
 
 int	run_external(char **args, t_env *env)
 {
-	char	*cmd_path;
-	char	**env_array;
-	int		status;
+	char		*cmd_path;
+	char		**env_array;
+	int			status;
 	struct stat	path_stat;
 
 	if (!args || !args[0])

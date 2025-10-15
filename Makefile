@@ -26,6 +26,7 @@ SRCS =	main.c \
 		parsing/init_env.c\
 		parsing/expand_var.c\
 		parsing/token_assigner.c\
+		parsing/cmd_list_init.c\
 		parsing/expand_tokens.c\
 		execution/1_execution.c\
 		execution/1a_exec_utils.c\

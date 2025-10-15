@@ -86,6 +86,14 @@ typedef struct s_pipe
 	int		commands_executed;
 }	t_pipe;
 
+typedef struct	s_heredoc
+{
+	int		i;
+	int		j;
+	char	*new;
+}	t_heredoc;
+
+
 extern int	g_exit_code;
 
 //parsing
@@ -95,9 +103,10 @@ char	*extract_var_name(char *str);
 char	*expand_single_var(char *var_name, t_env *env);
 void	expand_tokens(t_token *tokens, int count, t_env *env);
 char	*expand_embedded_vars(char *str, t_env *env);
-char	**collect_args(t_token *tokens, int *i, int count);
 t_redir	*add_redir(t_redir *list, char *type, char *target);
 t_cmd	*cmd_list_init(t_token *tokens, int *i, int count);
+void	process_variable(char **result, char **str, t_env *env);
+void	process_char(char **result, char c);
 
 //tokeninzer
 char	*extract_word(char **line);
