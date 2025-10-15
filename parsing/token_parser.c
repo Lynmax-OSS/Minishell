@@ -12,41 +12,6 @@
 
 #include "../minishell.h"
 
-char	**collect_args(t_token *tokens, int *i, int count)
-{
-	char	**args;
-	int		arg_count;
-	int		j;
-
-	arg_count = 0;
-	j = *i;
-	while (j < count && tokens[j].type != TOK_PIPE)
-	{
-		if (tokens[j].type == TOK_WORD
-			&& ((j == *i) || !is_redir(tokens[j - 1].value)))
-		{
-			arg_count++;
-		}
-		j++;
-	}
-	args = malloc(sizeof(char *) * (arg_count + 1));
-	if (!args)
-		return (NULL);
-	arg_count = 0;
-	while (*i < count && tokens[*i].type != TOK_PIPE)
-	{
-		if (tokens[*i].type == TOK_WORD
-			&& (*i == 0 || !is_redir(tokens[*i - 1].value)))
-		{
-			args[arg_count] = ft_strdup(tokens[*i].value);
-			arg_count++;
-		}
-		(*i)++;
-	}
-	args[arg_count] = NULL;
-	return (args);
-}
-
 t_cmd	*token_parser(t_token *tokens, int count)
 {
 	t_cmd	*head;

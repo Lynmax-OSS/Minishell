@@ -53,6 +53,46 @@ static void	parse_redirection(t_cmd *node, t_token *tokens, int *i, int count)
 	}
 }
 
+static int	count_args(t_token *tokens, int i, int count)
+{
+	int	arg_count;
+
+	arg_count = 0;
+	while (i < count && tokens[i].type != TOK_PIPE)
+	{
+		if (tokens[i].type == TOK_PIPE
+			&& (i == 0 || !is_redir(tokens[i - 1].value)))
+			arg_count++;
+		i++;
+	}
+	return (arg_count);
+}
+
+static char	**collect_args(t_token *tokens, int *i, int count)
+{
+	char	**args;
+	int		arg_count;
+	int		j;
+
+	arg_count = count_args(tokens, *i, count);
+	args = malloc(sizeof(char *) * (arg_count + 1));
+	if (!args)
+		return (NULL);
+	j = 0;
+	while (*i < count && tokens[*i].type != TOK_PIPE)
+	{
+		if (tokens[*i].type == TOK_WORD
+			&& (*i == 0 || !is_redir(tokens[*i - 1].value)))
+		{
+			args[j] = ft_strdup(tokens[*i].value);
+			j++;
+		}
+		(*i)++;
+	}
+	args[j] = NULL;
+	return (args);
+}
+
 t_cmd	*cmd_list_init(t_token *tokens, int *i, int count)
 {
 	t_cmd	*node;
