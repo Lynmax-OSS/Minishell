@@ -27,20 +27,6 @@ static t_toktype	classify_operator(char *s)
 	return (TOK_WORD);
 }
 
-// static void	extract_and_assign(t_token *tokens, char **cursor, int i)
-// {
-// 	if (is_operator(**cursor))
-// 	{
-// 		tokens[i].value = extract_operator_str(cursor);
-// 		tokens[i].type = classify_operator(tokens[i].value);
-// 	}
-// 	else
-// 	{
-// 		tokens[i].value = extract_word(cursor);
-// 		tokens[i].type = TOK_WORD;
-// 	}
-// }
-
 static void	extract_and_assign(t_token *tokens, char **cursor, int i)
 {
 	char	*save_pos;

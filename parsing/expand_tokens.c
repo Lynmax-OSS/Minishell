@@ -12,17 +12,6 @@
 
 #include "../minishell.h"
 
-// static char	*get_env_value(t_env *env, char *key)
-// {
-// 	while (env)
-// 	{
-// 		if (ft_strcmp(env->key, key) == 0)
-// 			return (env->value);
-// 		env = env->next;
-// 	}
-// 	return (NULL);
-// }
-
 static void	process_char(char **result, char c)
 {
 	char	*temp;
@@ -50,22 +39,6 @@ static void	process_variable(char **result, char **str, t_env *env)
 	free(var_name);
 	free(var_value);
 }
-
-// static char	*expand_word(char *word, t_env *env)
-// {
-// 	char	*val;
-// 	char	*key;
-
-// 	if (word[0] != '$')
-// 		return (ft_strdup(word));
-// 	if (ft_strcmp(word, "$?") == 0)
-// 		return (ft_itoa(g_exit_code));
-// 	key = word + 1;
-// 	val = get_env_value(env, key);
-// 	if (!val)
-// 		return (ft_strdup(""));
-// 	return (ft_strdup(val));
-// }
 
 void	expand_tokens(t_token *tokens, int count, t_env *env)
 {
