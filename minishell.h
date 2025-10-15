@@ -89,26 +89,33 @@ typedef struct s_pipe
 extern int	g_exit_code;
 
 //parsing
-int		is_whitespace(char c);
-int		is_operator(char c);
-int		is_redir(const char *s);
-void	skip_whitespace(char **line);
+int		validate_syntax(t_token *tokens, int count);
+t_env	*init_env(char **envp);
+char	*extract_var_name(char *str);
+char	*expand_single_var(char *var_name, t_env *env);
+void	expand_tokens(t_token *tokens, int count, t_env *env);
+char	*expand_embedded_vars(char *str, t_env *env);
+
+//tokeninzer
 char	*extract_word(char **line);
 char	*extract_operator_str(char **line);
 char	*extract_quoted(char **line, char quote);
 t_token	*tokenizer(char *input, int *count);
 t_cmd	*token_parser(t_token *tokens, int count);
-int		validate_syntax(t_token *tokens, int count);
-t_env	*init_env(char **envp);
-void	expand_tokens(t_token *tokens, int count, t_env *env);
-char	*extract_var_name(char *str);
-char	*expand_single_var(char *var_name, t_env *env);
-char	*expand_embedded_vars(char *str, t_env *env);
+void	handle_operator_token(t_token *tokens, char **cursor, int i);
+void	handle_word_token(t_token *tokens, char **cursor, int i);
+void	hnadle_double_quote_token(t_token *tokens, char **cursor, int i);
+void	handle_single_quote_token(t_token *tokens, char **cursor, int i);
+void	handle_operator_token(t_token *tokens, char **cursor, int i);
 
 //execution
 int		execution(t_cmd *head, t_env **env);
 
 ///utils
+void	skip_whitespace(char **line);
+int		is_whitespace(char c);
+int		is_operator(char c);
+int		is_redir(const char *s);
 char	*get_env_value(t_env *env, char *key);
 void	free_cmd_list(t_cmd *cmd);
 void	cleanup_shell(t_env *env);

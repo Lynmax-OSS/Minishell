@@ -12,21 +12,6 @@
 
 #include "../minishell.h"
 
-static t_toktype	classify_operator(char *s)
-{
-	if (!ft_strncmp(s, "|", 2))
-		return (TOK_PIPE);
-	if (!ft_strncmp(s, ">>", 3))
-		return (TOK_DREDIR_OUT);
-	if (!ft_strncmp(s, ">", 2))
-		return (TOK_REDIR_OUT);
-	if (!ft_strncmp(s, "<<", 3))
-		return (TOK_DREDIR_IN);
-	if (!ft_strncmp(s, "<", 2))
-		return (TOK_REDIR_IN);
-	return (TOK_WORD);
-}
-
 static void	extract_and_assign(t_token *tokens, char **cursor, int i)
 {
 	char	*save_pos;
@@ -35,10 +20,7 @@ static void	extract_and_assign(t_token *tokens, char **cursor, int i)
 	tokens[i].quoted = 0;
 	save_pos = *cursor;
 	if (is_operator(**cursor))
-	{
-		tokens[i].value = extract_operator_str(cursor);
-		tokens[i].type = classify_operator(tokens[i].value);
-	}
+		
 	else if (**cursor == '\'' && !is_operator(*(*cursor + 1)))
 	{
 		tokens[i].value = extract_quoted(cursor, **cursor);
