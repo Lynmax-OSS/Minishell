@@ -32,31 +32,36 @@ char	*extract_quoted(char **line, char quote)
 	return (result);
 }
 
+static char	*extract_part(char **line)
+{
+	char	*start;
+	int		len;
+
+	if (**line == '\'' || **line == '"')
+		return (extract_quoted(line, **line));
+	start = *line;
+	len = 0;
+	while (**line && !is_whitespace(**line)
+		&& !is_operator(**line)
+		&& **line != '\''
+		&& **line != '"')
+	{
+		len++;
+		(*line)++;
+	}
+	return (ft_strndup(start, len));
+}
+
 char	*extract_word(char **line)
 {
 	char	*result;
 	char	*part;
 	char	*temp;
-	char	*start;
-	int		len;
 
 	result = ft_strdup("");
 	while (**line && !is_whitespace(**line) && !is_operator(**line))
 	{
-		if (**line == '\'' || **line == '"')
-			part = extract_quoted(line, **line);
-		else
-		{
-			start = *line;
-			len = 0;
-			while (**line && !is_whitespace(**line) && !is_operator(**line)
-				&& **line != '\'' && **line != '"')
-			{
-				len++;
-				(*line)++;
-			}
-			part = ft_strndup(start, len);
-		}
+		part = extract_part(line);
 		temp = result;
 		result = ft_strjoin(result, part);
 		free(temp);

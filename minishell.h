@@ -95,6 +95,9 @@ char	*extract_var_name(char *str);
 char	*expand_single_var(char *var_name, t_env *env);
 void	expand_tokens(t_token *tokens, int count, t_env *env);
 char	*expand_embedded_vars(char *str, t_env *env);
+char	**collect_args(t_token *tokens, int *i, int count);
+t_redir	*add_redir(t_redir *list, char *type, char *target);
+t_cmd	*cmd_list_init(t_token *tokens, int *i, int count);
 
 //tokeninzer
 char	*extract_word(char **line);

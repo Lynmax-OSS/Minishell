@@ -12,27 +12,7 @@
 
 #include "../minishell.h"
 
-static t_redir	*add_redir(t_redir *list, char *type, char *target)
-{
-	t_redir	*new;
-	t_redir	*tmp;
-
-	new = malloc(sizeof(t_redir));
-	if (!new)
-		return (list);
-	new->type = type;
-	new->target = target;
-	new->next = NULL;
-	if (!list)
-		return (new);
-	tmp = list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-	return (list);
-}
-
-static char	**collect_args(t_token *tokens, int *i, int count)
+char	**collect_args(t_token *tokens, int *i, int count)
 {
 	char	**args;
 	int		arg_count;
@@ -65,40 +45,6 @@ static char	**collect_args(t_token *tokens, int *i, int count)
 	}
 	args[arg_count] = NULL;
 	return (args);
-}
-
-static t_cmd	*cmd_list_init(t_token *tokens, int *i, int count)
-{
-	t_cmd	*node;
-	char	*type;
-	char	*target;
-	int		start;
-
-	node = malloc(sizeof(t_cmd));
-	if (!node)
-		return (NULL);
-	start = *i;
-	node->args = collect_args(tokens, i, count);
-	node->redir = NULL;
-	node->next = NULL;
-	*i = start;
-	while (*i < count && tokens[*i].type != TOK_PIPE)
-	{
-		if (is_redir(tokens[*i].value))
-		{
-			type = ft_strdup(tokens[(*i)++].value);
-			if (*i < count && tokens[*i].type == TOK_WORD)
-			{
-				target = ft_strdup(tokens[(*i)++].value);
-				node->redir = add_redir(node->redir, type, target);
-			}
-		}
-		else
-		{
-			(*i)++;
-		}
-	}
-	return (node);
 }
 
 t_cmd	*token_parser(t_token *tokens, int count)
