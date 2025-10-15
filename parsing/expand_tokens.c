@@ -80,7 +80,7 @@ void	expand_tokens(t_token *tokens, int count, t_env *env)
 	while (i < count)
 	{
 		if (shoud_expand(tokens[i]))
-				handle_expansion(&tokens[i], env, i);
+			handle_expansion(&tokens[i], env, i);
 		i++;
 	}
 }
