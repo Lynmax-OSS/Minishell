@@ -101,6 +101,8 @@ t_cmd	*token_parser(t_token *tokens, int count);
 int		validate_syntax(t_token *tokens, int count);
 t_env	*init_env(char **envp);
 void	expand_tokens(t_token *tokens, int count, t_env *env);
+char	*extract_var_name(char *str);
+char	*expand_single_var(char *var_name, t_env *env);
 
 //execution
 int		execution(t_cmd *head, t_env **env);
@@ -109,6 +111,7 @@ int		execution(t_cmd *head, t_env **env);
 char	*get_env_value(t_env *env, char *key);
 void	free_cmd_list(t_cmd *cmd);
 void	cleanup_shell(t_env *env);
+char	*ft_strjoin_char(char *s1, char c);
 
 ///pipes
 int		execution_pipeline(t_cmd *head, t_env *env);

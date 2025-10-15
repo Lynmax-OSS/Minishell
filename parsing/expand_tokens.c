@@ -23,50 +23,6 @@
 // 	return (NULL);
 // }
 
-static char	*ft_strjoin_char(char *s1, char c)
-{
-	char	*result;
-	int		len;
-	int		i;
-
-	if (!s1)
-		return (NULL);
-	len = ft_strlen(s1);
-	result = malloc(len + 2);
-	if (!result)
-		return (NULL);
-	i = -1;
-	while (s1[++i])
-		result[i] = s1[i];
-	result[i] = c;
-	result[i + 1] = '\0';
-	return (result);
-}
-
-static char	*extract_var_name(char *str)
-{
-	int		i;
-
-	i = 0;
-	if (str[i] == '?')
-		return (ft_strdup("?"));
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	return (ft_strndup(str, i));
-}
-
-static char	*expand_single_var(char *var_name, t_env *env)
-{
-	char	*value;
-
-	if (ft_strcmp(var_name, "?") == 0)
-		return (ft_itoa(g_exit_code));
-	value = get_env_value(env, var_name);
-	if (value)
-		return (ft_strdup(value));
-	return (ft_strdup(""));
-}
-
 static void	process_char(char **result, char c)
 {
 	char	*temp;

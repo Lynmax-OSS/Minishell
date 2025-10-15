@@ -44,15 +44,13 @@ char	*extract_word(char **line)
 	while (**line && !is_whitespace(**line) && !is_operator(**line))
 	{
 		if (**line == '\'' || **line == '"')
-		{
 			part = extract_quoted(line, **line);
-		}
 		else
 		{
 			start = *line;
 			len = 0;
 			while (**line && !is_whitespace(**line) && !is_operator(**line) 
-				   && **line != '\'' && **line != '"')
+					&& **line != '\'' && **line != '"')
 			{
 				len++;
 				(*line)++;
