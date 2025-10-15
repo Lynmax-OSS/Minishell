@@ -40,6 +40,35 @@ static void	process_variable(char **result, char **str, t_env *env)
 	free(var_value);
 }
 
+static int	shoud_expand(t_token token)
+{
+	if (token.type != TOK_WORD)
+		return (0);
+	if (token.quoted == 1)
+		return (0);
+	if (ft_strchr(token.value, '$') == NULL)
+		return (0);
+	return (1);
+}
+
+static void	handle_expansion(t_token *token, t_env *env, int i)
+{
+	char	*expanded;
+	char	*var_name;
+	char	*value;
+
+	if (i == 0 && token->value[0] == '$')
+	{
+		var_name = token->value + 1;
+		value = get_env_value(env, var_name);
+		if (value && value[0] != '\0')
+			return ;
+	}
+	expanded = expand_embedded_vars(token->value, env);
+	free (token->value);
+	token->value = expanded;
+}
+
 void	expand_tokens(t_token *tokens, int count, t_env *env)
 {
 	int		i;
@@ -50,23 +79,8 @@ void	expand_tokens(t_token *tokens, int count, t_env *env)
 	i = 0;
 	while (i < count)
 	{
-		if (tokens[i].type == TOK_WORD && tokens[i].quoted != 1
-			&& ft_strchr(tokens[i].value, '$') != NULL)
-		{
-			if (i == 0 && tokens[i].value[0] == '$')
-			{
-				var_name = tokens[i].value + 1;
-				value = get_env_value(env, var_name);
-				if (value && value[0] != '\0')
-				{
-					i++;
-					continue ;
-				}
-			}
-			expanded = expand_embedded_vars(tokens[i].value, env);
-			free(tokens[i].value);
-			tokens[i].value = expanded;
-		}
+		if (shoud_expand(tokens[i]))
+				handle_expansion(&tokens[i], env, i);
 		i++;
 	}
 }
