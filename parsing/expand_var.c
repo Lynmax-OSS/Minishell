@@ -12,18 +12,6 @@
 
 #include "../minishell.h"
 
-char	*extract_var_name(char *str)
-{
-	int		i;
-
-	i = 0;
-	if (str[i] == '?')
-		return (ft_strdup("?"));
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	return (ft_strndup(str, i));
-}
-
 char	*expand_single_var(char *var_name, t_env *env)
 {
 	char	*value;
@@ -34,4 +22,25 @@ char	*expand_single_var(char *var_name, t_env *env)
 	if (value)
 		return (ft_strdup(value));
 	return (ft_strdup(""));
+}
+
+char	*expand_embedded_vars(char *str, t_env *env)
+{
+	char	*result;
+	char	*cursor;
+
+	result = ft_strdup("");
+	cursor = str;
+	while (*cursor)
+	{
+		if (*cursor == '$' && *(cursor + 1) && *(cursor + 1) != ' '
+			&& *(cursor + 1) != '\0' && *(cursor + 1) != '"')
+			process_variable(&result, &cursor, env);
+		else
+		{
+			process_char(&result, *cursor);
+			cursor++;
+		}
+	}
+	return (result);
 }

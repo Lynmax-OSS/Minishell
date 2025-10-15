@@ -51,27 +51,6 @@ static void	process_variable(char **result, char **str, t_env *env)
 	free(var_value);
 }
 
-static char	*expand_embedded_vars(char *str, t_env *env)
-{
-	char	*result;
-	char	*cursor;
-
-	result = ft_strdup("");
-	cursor = str;
-	while (*cursor)
-	{
-		if (*cursor == '$' && *(cursor + 1) && *(cursor + 1) != ' '
-			&& *(cursor + 1) != '\0' && *(cursor + 1) != '"')
-			process_variable(&result, &cursor, env);
-		else
-		{
-			process_char(&result, *cursor);
-			cursor++;
-		}
-	}
-	return (result);
-}
-
 // static char	*expand_word(char *word, t_env *env)
 // {
 // 	char	*val;

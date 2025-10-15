@@ -49,8 +49,8 @@ char	*extract_word(char **line)
 		{
 			start = *line;
 			len = 0;
-			while (**line && !is_whitespace(**line) && !is_operator(**line) 
-					&& **line != '\'' && **line != '"')
+			while (**line && !is_whitespace(**line) && !is_operator(**line)
+				&& **line != '\'' && **line != '"')
 			{
 				len++;
 				(*line)++;
@@ -82,4 +82,16 @@ char	*extract_operator_str(char **line)
 		(*line)++;
 		return (op);
 	}
+}
+
+char	*extract_var_name(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (str[i] == '?')
+		return (ft_strdup("?"));
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		i++;
+	return (ft_strndup(str, i));
 }

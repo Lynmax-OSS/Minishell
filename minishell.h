@@ -103,6 +103,7 @@ t_env	*init_env(char **envp);
 void	expand_tokens(t_token *tokens, int count, t_env *env);
 char	*extract_var_name(char *str);
 char	*expand_single_var(char *var_name, t_env *env);
+char	*expand_embedded_vars(char *str, t_env *env);
 
 //execution
 int		execution(t_cmd *head, t_env **env);
