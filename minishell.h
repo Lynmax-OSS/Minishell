@@ -104,7 +104,7 @@ t_token	*tokenizer(char *input, int *count);
 t_cmd	*token_parser(t_token *tokens, int count);
 void	handle_operator_token(t_token *tokens, char **cursor, int i);
 void	handle_word_token(t_token *tokens, char **cursor, int i);
-void	hnadle_double_quote_token(t_token *tokens, char **cursor, int i);
+void	handle_double_quote_token(t_token *tokens, char **cursor, int i);
 void	handle_single_quote_token(t_token *tokens, char **cursor, int i);
 void	handle_operator_token(t_token *tokens, char **cursor, int i);
 

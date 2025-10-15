@@ -41,7 +41,7 @@ void	handle_single_quote_token(t_token *tokens, char **cursor, int i)
 	tokens[i].type = TOK_WORD;
 }
 
-void	hnadle_double_quote_token(t_token *tokens, char **cursor, int i)
+void	handle_double_quote_token(t_token *tokens, char **cursor, int i)
 {
 	char	*before;
 

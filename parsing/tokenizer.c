@@ -14,41 +14,14 @@
 
 static void	extract_and_assign(t_token *tokens, char **cursor, int i)
 {
-	char	*save_pos;
-	char	*before;
-
-	tokens[i].quoted = 0;
-	save_pos = *cursor;
 	if (is_operator(**cursor))
-		
+		handle_operator_token(tokens, cursor, i);
 	else if (**cursor == '\'' && !is_operator(*(*cursor + 1)))
-	{
-		tokens[i].value = extract_quoted(cursor, **cursor);
-		tokens[i].type = TOK_WORD;
-		tokens[i].quoted = 1;
-	}
+		handle_single_quote_token(tokens, cursor, i);
 	else if (**cursor == '"' && !is_operator(*(*cursor + 1)))
-	{
-		before = *cursor;
-		tokens[i].value = extract_quoted(cursor, **cursor);
-		if (**cursor && !is_whitespace(**cursor) && !is_operator(**cursor))
-		{
-			free(tokens[i].value);
-			*cursor = before;
-			tokens[i].value = extract_word(cursor);
-			tokens[i].type = TOK_WORD;
-		}
-		else
-		{
-			tokens[i].type = TOK_WORD;
-			tokens[i].quoted = 2;
-		}
-	}
+		handle_double_quote_token(tokens, cursor, i);
 	else
-	{
-		tokens[i].value = extract_word(cursor);
-		tokens[i].type = TOK_WORD;
-	}
+		handle_word_token(tokens, cursor, i);
 }
 
 t_token	*tokenizer(char *input, int *count)
