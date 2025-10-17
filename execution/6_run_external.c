@@ -6,7 +6,7 @@
 /*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:57:26 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/15 17:31:05 by keteo            ###   ########.fr       */
+/*   Updated: 2025/10/17 10:49:19 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,57 +52,57 @@ static char	*find_command_path(char *cmd, t_env *env)
 	return (search_in_path(cmd, env));
 }
 
+static int	check_if_directory(char *path)
+{
+	struct stat	path_stat;
+
+	if (ft_strchr(path, '/') && stat(path, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(path, STDERR_FILENO);
+			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+			return (126);
+		}
+	}
+	return (0);
+}
+
+static int	handle_no_cmd_path(char *arg)
+{
+	if (ft_strcmp(arg, "$PWD") == 0)
+		ft_putstr_fd("minishell: $PWD: No such file or directory\n",
+			STDERR_FILENO);
+	else if (ft_strchr(arg, '/') && access(arg, F_OK) == 0)
+		ft_putstr_fd("minishell: Permission denied\n", STDERR_FILENO);
+	else if (ft_strchr(arg, '/'))
+		ft_putstr_fd("minieshell: No such file or directory\n", STDERR_FILENO);
+	else
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	}
+	if (ft_strcmp(arg, "$PWD") == 0 || ft_strchr(arg, '/'))
+		return (127);
+	return (127);
+}
+
 int	run_external(char **args, t_env *env)
 {
 	char		*cmd_path;
 	char		**env_array;
 	int			status;
-	struct stat	path_stat;
 
 	if (!args || !args[0])
 		return (1);
-	if (ft_strchr(args[0], '/') && stat(args[0], &path_stat) == 0)
-	{
-		if (S_ISDIR(path_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-			return (126);
-		}
-	}
+	status = check_if_directory(args[0]);
+	if (status)
+		return (status);
 	cmd_path = find_command_path(args[0], env);
 	if (!cmd_path)
-	{
-		if (ft_strcmp(args[0], "$PWD") == 0)
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-			return (127);
-		}
-		else if (ft_strchr(args[0], '/') && access(args[0], F_OK) == 0)
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
-			return (126);
-		}
-		else if (ft_strchr(args[0], '/'))
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-			return (127);
-		}
-		else
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(args[0], STDERR_FILENO);
-			ft_putstr_fd(": command not found\n", STDERR_FILENO);
-			return (127);
-		}
-	}
+		return (handle_no_cmd_path(args[0]));
 	env_array = convert_env_to_array(env);
 	if (!env_array)
 	{

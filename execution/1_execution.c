@@ -6,7 +6,7 @@
 /*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 20:12:31 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/17 09:57:30 by keteo            ###   ########.fr       */
+/*   Updated: 2025/10/17 10:48:28 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ static int	exec_single_cmd(t_cmd *head, t_env **env)
 int	execution(t_cmd *head, t_env **env)
 {
 	int		status;
-	int		save_fds[2];
-	char	**new_args;
 
 	if (!head || !head->args || !head->args[0])
 		return (0);

@@ -45,6 +45,7 @@ SRCS =	main.c \
 		execution/5c_env.c\
 		execution/5d_exit.c\
 		execution/5e_cd.c\
+		execution/5e1_cd_utils.c\
 		execution/5f_unset.c\
 		execution/5g_export.c\
 		execution/5g1_print_sorted.c\
