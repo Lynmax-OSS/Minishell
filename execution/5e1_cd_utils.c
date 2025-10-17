@@ -83,7 +83,7 @@ void	update_pwd_env(char *oldpwd, t_env **env)
 
 int	check_cd_args(char **args)
 {
-	int arg_count;
+	int	arg_count;
 
 	arg_count = 0;
 	while (args[arg_count])
