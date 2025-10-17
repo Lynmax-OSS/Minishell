@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:09:14 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/09 22:44:42 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/17 16:57:46 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	ft_echo(char **args)
 	int	newline;
 	int	j;
 
+	if (!args || !args[0])
+		return (1);
 	i = 1;
 	newline = 1;
 	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')

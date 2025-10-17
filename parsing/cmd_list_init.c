@@ -60,7 +60,7 @@ static int	count_args(t_token *tokens, int i, int count)
 	arg_count = 0;
 	while (i < count && tokens[i].type != TOK_PIPE)
 	{
-		if (tokens[i].type == TOK_PIPE
+		if (tokens[i].type == TOK_WORD //changed from TOK_PIPE
 			&& (i == 0 || !is_redir(tokens[i - 1].value)))
 			arg_count++;
 		i++;
@@ -85,6 +85,8 @@ static char	**collect_args(t_token *tokens, int *i, int count)
 			&& (*i == 0 || !is_redir(tokens[*i - 1].value)))
 		{
 			args[j] = ft_strdup(tokens[*i].value);
+			if (!args[j]) //added to handle allocation failure
+				return (free_string_array(args), NULL);
 			j++;
 		}
 		(*i)++;

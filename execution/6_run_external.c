@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6_run_external.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:57:26 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/17 10:49:19 by keteo            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:27:40 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ int	run_external(char **args, t_env *env)
 
 	if (!args || !args[0])
 		return (1);
+	status = check_permission_denied(args[0]);
+	if (status)
+		return (status);
 	status = check_if_directory(args[0]);
 	if (status)
 		return (status);

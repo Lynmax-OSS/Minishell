@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:24:28 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 12:24:29 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/17 17:27:53 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,21 @@ char	*ft_strjoin3(char *s1, char *s2, char *s3)
 	result = ft_strjoin(tmp, s3);
 	free(tmp);
 	return (result);
+}
+
+int	check_permission_denied(char *arg)
+{
+	struct stat	path_stat;
+
+	if (ft_strchr(arg, '/') && stat(arg, &path_stat) == 0)
+	{
+		if (access(arg, X_OK) == -1)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(arg, STDERR_FILENO);
+			ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+			return (126);
+		}
+	}
+	return (0);
 }

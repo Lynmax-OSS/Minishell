@@ -186,6 +186,7 @@ char	**convert_env_to_array(t_env *env);
 int		execute_and_cleanup(char *cmd_path, char **args, char **env_array);
 void	free_string_array(char **array);
 char	*ft_strjoin3(char *s1, char *s2, char *s3);
+int		check_permission_denied(char *arg);
 
 ///signal
 void	handle_interrupt(int sig);

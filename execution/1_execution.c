@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_execution.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 20:12:31 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/17 10:48:28 by keteo            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:02:28 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,13 @@ static int	exec_single_cmd(t_cmd *head, t_env **env)
 	int	save_fds[2];
 	int	status;
 
+	status = 0;
 	if (!setup_redirections(head, *env, save_fds))
 		return (1);
 	if (is_builtin(head->args))
 		status = run_builtin(head->args, env);
+	else
+		status = run_external(head->args, *env);
 	restore_std_fds(save_fds);
 	return (status);
 }
