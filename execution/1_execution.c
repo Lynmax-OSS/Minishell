@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_execution.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 20:12:31 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/10 04:10:59 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/17 09:57:30 by keteo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,10 @@ static int	setup_redirections(t_cmd *cmd, t_env *env, int save_fds[2])
 	return (1);
 }
 
-int	execution(t_cmd *head, t_env **env)
+static int	exec_empty_or_shifted_args(t_cmd *head, t_env **env)
 {
-	int		status;
-	int		save_fds[2];
 	char	**new_args;
 
-	if (!head || !head->args || !head->args[0])
-		return (0);
 	if (head->args[0][0] == '\0')
 	{
 		if (head->args[1] != NULL && head->args[1][0] != '\0')
@@ -59,19 +55,37 @@ int	execution(t_cmd *head, t_env **env)
 		}
 		return (0);
 	}
-	if (!head->next)
-	{
-		if (!setup_redirections(head, *env, save_fds))
-			return (1);
-	}
-	if (!head->next && is_builtin(head->args))
+	return (-1);
+}
+
+static int	exec_single_cmd(t_cmd *head, t_env **env)
+{
+	int	save_fds[2];
+	int	status;
+
+	if (!setup_redirections(head, *env, save_fds))
+		return (1);
+	if (is_builtin(head->args))
 		status = run_builtin(head->args, env);
-	else if (head->next)
+	restore_std_fds(save_fds);
+	return (status);
+}
+
+int	execution(t_cmd *head, t_env **env)
+{
+	int		status;
+	int		save_fds[2];
+	char	**new_args;
+
+	if (!head || !head->args || !head->args[0])
+		return (0);
+	status = exec_empty_or_shifted_args(head, env);
+	if (status != -1)
+		return (status);
+	if (head->next)
 		status = execution_pipeline(head, *env);
 	else
-		status = run_external(head->args, *env);
-	if (!head->next)
-		restore_std_fds(save_fds);
+		status = exec_single_cmd(head, env);
 	g_exit_code = status;
 	if (!head->next)
 		free_cmd_list(head);
