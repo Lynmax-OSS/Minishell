@@ -93,6 +93,16 @@ typedef struct	s_heredoc
 	char	*new;
 }	t_heredoc;
 
+typedef struct s_minishell
+{
+	char	*line;
+	int		count;
+	t_token	*tokens;
+	t_cmd	*cmd_line;
+	t_env	*env;
+	int		exec_status;	
+}	t_minishell;
+
 
 extern int	g_exit_code;
 

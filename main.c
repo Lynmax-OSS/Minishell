@@ -57,53 +57,53 @@
 
 int	g_exit_code = 0;
 
+void	free_token(t_token *tokens, int count)
+{
+	while (count > 0)
+		free (tokens[--count].value);
+	free (tokens);
+}
+
+
 int	main(int ac, char **av, char **envp)
 {
-	char	*line;
-	int		count;
-	t_token	*tokens;
-	t_cmd	*cmd_line;
-	t_env	*env;
-	int		exec_status;
+	t_minishell	minishell;
 
 	(void)ac;
 	(void)av;
-	// count = 0;
-	env = init_env(envp);
+	minishell.env = init_env(envp);
 	setup_signals();
 	while (1)
 	{
-		line = readline("minishell> ");
-		if (!line)
+		minishell.line = readline("minishell> ");
+		if (!minishell.line)
 			break ;
-		if (*line)
-			add_history(line);
-		count = 0; //
-		tokens = tokenizer(line, &count);
-		if (!tokens) // safety check
+		if (*minishell.line)
+			add_history(minishell.line);
+		minishell.count = 0;
+		minishell.tokens = tokenizer(minishell.line, &minishell.count);
+		if (!minishell.tokens)
 		{
-			free(line);
+			free(minishell.line);
 			continue ;
 		}
-		expand_tokens(tokens, count, env);
-		cmd_line = token_parser(tokens, count);
-		if (cmd_line)
-			exec_status = execution(cmd_line, &env);
+		expand_tokens(minishell.tokens, minishell.count, minishell.env);
+		minishell.cmd_line = token_parser(minishell.tokens, minishell.count);
+		if (minishell.cmd_line)
+		{
+			minishell.exec_status = execution(minishell.cmd_line,
+					&minishell.env);
+		}
 		else
-			exec_status = 0;
-		g_exit_code = exec_status;;
-		// while (count--)
-		// 	free(tokens[count].value);
-		while (count > 0) // safer cleanup
-			free(tokens[--count].value);
-		free(tokens);
-		free(line);
+			minishell.exec_status = 0;
+		g_exit_code = minishell.exec_status;
+		free_token(minishell.tokens, minishell.count)
+		free(minishell.line);
 	}
-	cleanup_shell(env);
+	cleanup_shell(minishell.env);
 	printf("exit\n");
 	return (g_exit_code);
 }
-
 
 // void	print_env_list(t_env *env)
 // {
