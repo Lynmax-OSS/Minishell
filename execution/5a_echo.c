@@ -6,24 +6,11 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:09:14 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/17 16:57:46 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/30 03:12:01 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// void	ft_putstr_fd(char *s, int fd)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!s)
-// 		return ;
-// 	while (s[i] != '\0')
-// 	{
-// 		write(fd, &s[i++], 1);
-// 	}
-// }
 
 static void	print_echo(char **args, int i, int newline)
 {
@@ -62,32 +49,3 @@ int	ft_echo(char **args)
 	g_exit_code = 0;
 	return (0);
 }
-
-// void test_ft_echo(void)
-// {
-//     printf("=== Echo Tests ===\n");
-//     // Basic
-//     char *args1[] = {"echo", "hello", "world", NULL};
-//     ft_echo(args1);
-//     // -n flag
-//     char *args2[] = {"echo", "-n", "hello", NULL};
-//     ft_echo(args2); printf(" [no newline]\n");
-//     // Multiple -n flags
-//     char *args3[] = {"echo", "-n", "-n", "hello", NULL};
-//     ft_echo(args3); printf(" [multiple -n]\n");
-//     // Empty echo
-//     char *args4[] = {"echo", NULL};
-//     ft_echo(args4);
-//     // echo with only flags
-//     char *args5[] = {"echo", "-n", NULL};
-//     ft_echo(args5); printf(" [only -n flag]\n");
-//     // Invalid flag (should still print)
-//     char *args6[] = {"echo", "-x", "hello", NULL};
-//     ft_echo(args6);
-// }
-
-// int main(void)
-// {
-// 	test_ft_echo();
-// 	return (0);
-// }

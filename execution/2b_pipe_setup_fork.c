@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 11:10:23 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/10 03:18:33 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/30 03:11:31 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,6 @@ static void	execute_command_process(t_cmd *cmd, int cmd_index, t_pipe *data)
 	else
 		exit(run_external(cmd->args, data->env));
 }
-
-// static void	restore_original_io(int *saved_fds)
-// {
-// 	dup2(saved_fds[0], STDIN_FILENO);
-// 	dup2(saved_fds[1], STDOUT_FILENO);
-// }
 
 int	setup_and_fork_command(t_cmd *cmd, int cmd_index, t_pipe *data)
 {

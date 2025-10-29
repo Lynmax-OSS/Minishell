@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4c_expand.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 15:57:36 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/15 17:49:29 by keteo            ###   ########.fr       */
+/*   Updated: 2025/10/30 03:11:46 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,6 @@ static int	find_var_end(char *line, int start)
 		i++;
 	return (i);
 }
-
-// static char	*join_and_free(char *s1, char *s2)
-// {
-// 	char	*result;
-
-// 	result = ft_strjoin(s1, s2);
-// 	free(s1);
-// 	return (result);
-// }
 
 static char	*join_char(char *str, char c)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   5d_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:51:32 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/17 10:04:56 by keteo            ###   ########.fr       */
+/*   Updated: 2025/10/30 03:12:09 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,6 @@ static int	is_valid_number(char *arg)
 	}
 	return (1);
 }
-
-// static void	exit_with_error(char *arg)
-// {
-// 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-// 	ft_putstr_fd(arg, STDERR_FILENO);
-// 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-// 	exit(2);
-// }
 
 static void	exit_stderr(char **args, t_env **env)
 {

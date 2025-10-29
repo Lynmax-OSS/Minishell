@@ -12,6 +12,21 @@
 
 #include "../minishell.h"
 
+int	check_cd_args(char **args)
+{
+	int	arg_count;
+
+	arg_count = 0;
+	while (args[arg_count])
+		arg_count++;
+	if (arg_count > 2 || (arg_count == 2 && ft_strchr(args[1], ' ')))
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
+	return (0);
+}
+
 char	*get_cd_path(char **args, t_env **env, int *should_print)
 {
 	char	*path;
@@ -79,19 +94,4 @@ void	update_pwd_env(char *oldpwd, t_env **env)
 	update_single_env_var(env, "PWD", newpwd);
 	free(newpwd);
 	free(oldpwd);
-}
-
-int	check_cd_args(char **args)
-{
-	int	arg_count;
-
-	arg_count = 0;
-	while (args[arg_count])
-		arg_count++;
-	if (arg_count > 2 || (arg_count == 2 && ft_strchr(args[1], ' ')))
-	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
-		return (1);
-	}
-	return (0);
 }
