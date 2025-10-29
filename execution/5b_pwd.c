@@ -6,24 +6,11 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 13:42:59 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/27 14:47:09 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/30 02:49:03 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// void	ft_putstr_fd(char *s, int fd)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!s)
-// 		return ;
-// 	while (s[i] != '\0')
-// 	{
-// 		write(fd, &s[i++], 1);
-// 	}
-// }
 
 int	ft_pwd(void)
 {
@@ -38,17 +25,3 @@ int	ft_pwd(void)
 	perror("pwd");
 	return (1);
 }
-
-// #include <stdio.h>
-
-// void test_ft_pwd(void)
-// {
-//     int result = ft_pwd();
-//     printf("%d\n", result);
-// }
-
-// int main(void)
-// {
-//     test_ft_pwd();
-//     return 0;
-// }

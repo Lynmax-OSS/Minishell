@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:57:26 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/17 17:27:40 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/30 02:55:32 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ int	run_external(char **args, t_env *env)
 
 	if (!args || !args[0])
 		return (1);
+	status = handle_dollar_pwd(args, env);
+	if (status)
+		return (status);
 	status = check_permission_denied(args[0]);
 	if (status)
 		return (status);
@@ -108,10 +111,7 @@ int	run_external(char **args, t_env *env)
 		return (handle_no_cmd_path(args[0]));
 	env_array = convert_env_to_array(env);
 	if (!env_array)
-	{
-		free(cmd_path);
-		return (127);
-	}
+		return (free(cmd_path), 127);
 	status = execute_and_cleanup(cmd_path, args, env_array);
 	return (status);
 }

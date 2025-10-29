@@ -86,7 +86,7 @@ typedef struct s_pipe
 	int		commands_executed;
 }	t_pipe;
 
-typedef struct	s_heredoc
+typedef struct s_heredoc
 {
 	int		i;
 	int		j;
@@ -102,7 +102,6 @@ typedef struct s_minishell
 	t_env	*env;
 	int		exec_status;	
 }	t_minishell;
-
 
 extern int	g_exit_code;
 
@@ -179,7 +178,6 @@ void	print_sorted_variables(t_env *env);
 void	update_env_variable(t_env **env, char *key, char *value);
 int		valid_identifier(char *arg);
 
-
 ///external
 int		run_external(char **args, t_env *env);
 char	**convert_env_to_array(t_env *env);
@@ -187,6 +185,7 @@ int		execute_and_cleanup(char *cmd_path, char **args, char **env_array);
 void	free_string_array(char **array);
 char	*ft_strjoin3(char *s1, char *s2, char *s3);
 int		check_permission_denied(char *arg);
+int		handle_dollar_pwd(char **args, t_env *env);
 
 ///signal
 void	handle_interrupt(int sig);

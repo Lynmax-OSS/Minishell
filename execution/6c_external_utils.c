@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:24:28 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/17 17:27:53 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/30 02:55:40 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,28 @@ int	check_permission_denied(char *arg)
 			ft_putstr_fd(arg, STDERR_FILENO);
 			ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
 			return (126);
+		}
+	}
+	return (0);
+}
+
+int	handle_dollar_pwd(char **args, t_env *env)
+{
+	char		*pwd_value;
+	struct stat	stat_buf;
+
+	if (ft_strcmp(args[0], "$PWD") == 0)
+	{
+		pwd_value = get_env_value(env, "PWD");
+		if (pwd_value)
+		{
+			if (stat(pwd_value, &stat_buf) == 0 && S_ISDIR(stat_buf.st_mode))
+			{
+				ft_putstr_fd("minishell: ", STDERR_FILENO);
+				ft_putstr_fd(pwd_value, STDERR_FILENO);
+				ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+				return (126);
+			}
 		}
 	}
 	return (0);
