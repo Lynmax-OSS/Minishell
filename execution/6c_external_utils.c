@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:24:28 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/31 05:20:52 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/31 05:28:46 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,21 @@ char	*search_in_path(char *cmd, t_env *env)
 
 int	handle_directory_error(char *path)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(path, STDERR_FILENO);
-	ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-	return (126);
+	if (path)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		return (126);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		return (127);
+	}
+
 }
 
 int	check_expanded_directory(char *path, t_env *env)
