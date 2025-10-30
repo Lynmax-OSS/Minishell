@@ -6,39 +6,39 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 11:57:26 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/30 02:55:32 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/31 05:19:37 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char	*search_in_path(char *cmd, t_env *env)
+static int	check_permission_denied(char *arg)
 {
-	char	*path;
-	char	**dirs;
-	char	*full_path;
-	int		i;
+	struct stat	path_stat;
 
-	path = get_env_value(env, "PATH");
-	if (!path)
-		return (NULL);
-	dirs = ft_split(path, ':');
-	if (!dirs)
-		return (NULL);
-	i = 0;
-	while (dirs[i])
+	if (ft_strchr(arg, '/') && stat(arg, &path_stat) == 0)
 	{
-		full_path = ft_strjoin3(dirs[i], "/", cmd);
-		if (full_path && access(full_path, X_OK) == 0)
+		if (access(arg, X_OK) == -1)
 		{
-			free_string_array(dirs);
-			return (full_path);
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(arg, STDERR_FILENO);
+			ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+			return (126);
 		}
-		free(full_path);
-		i++;
 	}
-	free_string_array(dirs);
-	return (NULL);
+	return (0);
+}
+
+static int	check_if_directory(char *path, t_env *env)
+{
+	struct stat	path_stat;
+
+	if (ft_strchr(path, '/') && stat(path, &path_stat) == 0)
+	{
+		if (S_ISDIR(path_stat.st_mode))
+			return (handle_directory_error(path));
+	}
+	return (check_expanded_directory(path, env));
 }
 
 static char	*find_command_path(char *cmd, t_env *env)
@@ -52,40 +52,18 @@ static char	*find_command_path(char *cmd, t_env *env)
 	return (search_in_path(cmd, env));
 }
 
-static int	check_if_directory(char *path)
-{
-	struct stat	path_stat;
-
-	if (ft_strchr(path, '/') && stat(path, &path_stat) == 0)
-	{
-		if (S_ISDIR(path_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(path, STDERR_FILENO);
-			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-			return (126);
-		}
-	}
-	return (0);
-}
-
 static int	handle_no_cmd_path(char *arg)
 {
-	if (ft_strcmp(arg, "$PWD") == 0)
-		ft_putstr_fd("minishell: $PWD: No such file or directory\n",
-			STDERR_FILENO);
-	else if (ft_strchr(arg, '/') && access(arg, F_OK) == 0)
+	if (ft_strchr(arg, '/') && access(arg, F_OK) == 0)
 		ft_putstr_fd("minishell: Permission denied\n", STDERR_FILENO);
 	else if (ft_strchr(arg, '/'))
-		ft_putstr_fd("minieshell: No such file or directory\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: No such file or directory\n", STDERR_FILENO);
 	else
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
-	if (ft_strcmp(arg, "$PWD") == 0 || ft_strchr(arg, '/'))
-		return (127);
 	return (127);
 }
 
@@ -97,13 +75,10 @@ int	run_external(char **args, t_env *env)
 
 	if (!args || !args[0])
 		return (1);
-	status = handle_dollar_pwd(args, env);
-	if (status)
-		return (status);
 	status = check_permission_denied(args[0]);
 	if (status)
 		return (status);
-	status = check_if_directory(args[0]);
+	status = check_if_directory(args[0], env);
 	if (status)
 		return (status);
 	cmd_path = find_command_path(args[0], env);

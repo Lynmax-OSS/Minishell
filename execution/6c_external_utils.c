@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:24:28 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/30 02:55:40 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/31 05:20:52 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,41 +40,61 @@ char	*ft_strjoin3(char *s1, char *s2, char *s3)
 	return (result);
 }
 
-int	check_permission_denied(char *arg)
+char	*search_in_path(char *cmd, t_env *env)
 {
-	struct stat	path_stat;
+	char	*path;
+	char	**dirs;
+	char	*full_path;
+	int		i;
 
-	if (ft_strchr(arg, '/') && stat(arg, &path_stat) == 0)
+	path = get_env_value(env, "PATH");
+	if (!path)
+		return (NULL);
+	dirs = ft_split(path, ':');
+	if (!dirs)
+		return (NULL);
+	i = 0;
+	while (dirs[i])
 	{
-		if (access(arg, X_OK) == -1)
+		full_path = ft_strjoin3(dirs[i], "/", cmd);
+		if (full_path && access(full_path, X_OK) == 0)
 		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(arg, STDERR_FILENO);
-			ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
-			return (126);
+			free_string_array(dirs);
+			return (full_path);
 		}
+		free(full_path);
+		i++;
 	}
-	return (0);
+	free_string_array(dirs);
+	return (NULL);
 }
 
-int	handle_dollar_pwd(char **args, t_env *env)
+int	handle_directory_error(char *path)
 {
-	char		*pwd_value;
-	struct stat	stat_buf;
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(path, STDERR_FILENO);
+	ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+	return (126);
+}
 
-	if (ft_strcmp(args[0], "$PWD") == 0)
+int	check_expanded_directory(char *path, t_env *env)
+{
+	struct stat	path_stat;
+	char		*expanded_path;
+
+	if (path[0] == '$')
 	{
-		pwd_value = get_env_value(env, "PWD");
-		if (pwd_value)
+		expanded_path = expand_single_var(path + 1, env);
+		if (expanded_path && expanded_path[0] != '\0')
 		{
-			if (stat(pwd_value, &stat_buf) == 0 && S_ISDIR(stat_buf.st_mode))
+			if (stat(expanded_path, &path_stat) == 0
+				&& S_ISDIR(path_stat.st_mode))
 			{
-				ft_putstr_fd("minishell: ", STDERR_FILENO);
-				ft_putstr_fd(pwd_value, STDERR_FILENO);
-				ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-				return (126);
+				free(expanded_path);
+				return (handle_directory_error(path));
 			}
 		}
+		free(expanded_path);
 	}
 	return (0);
 }

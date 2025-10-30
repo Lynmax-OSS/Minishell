@@ -184,8 +184,9 @@ char	**convert_env_to_array(t_env *env);
 int		execute_and_cleanup(char *cmd_path, char **args, char **env_array);
 void	free_string_array(char **array);
 char	*ft_strjoin3(char *s1, char *s2, char *s3);
-int		check_permission_denied(char *arg);
-int		handle_dollar_pwd(char **args, t_env *env);
+char	*search_in_path(char *cmd, t_env *env);
+int		handle_directory_error(char *path);
+int		check_expanded_directory(char *path, t_env *env);
 
 ///signal
 void	handle_interrupt(int sig);
