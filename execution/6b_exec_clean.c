@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:24:22 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/27 15:45:50 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/31 17:22:25 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	execute_and_cleanup(char *cmd_path, char **args, char **env_array)
 	pid_t	pid;
 	int		parent_signal;
 
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 	{

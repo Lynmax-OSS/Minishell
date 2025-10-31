@@ -45,6 +45,7 @@ static void	shell_loop(t_minishell *minishell)
 {
 	while (1)
 	{
+		setup_signals();
 		minishell->line = readline("minishell> ");
 		if (!minishell->line)
 			break ;
@@ -66,7 +67,6 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	minishell.env = init_env(envp);
-	setup_signals();
 	shell_loop(&minishell);
 	cleanup_shell(minishell.env);
 	printf("exit\n");

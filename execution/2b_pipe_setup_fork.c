@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 11:10:23 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/30 03:11:31 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/31 17:39:39 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,10 @@ static void	close_all_pipes_in_child(t_pipe *data)
 	}
 }
 
-// static void	close_fds(int *saved_fds)
-// {
-// 	close(saved_fds[0]);
-// 	close(saved_fds[1]);
-// }
-
 static void	execute_command_process(t_cmd *cmd, int cmd_index, t_pipe *data)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (setup_redirection(cmd_index, data) != 0)
 		exit(1);
 	if (apply_redirections(cmd->redir, data->env) != 0)
@@ -65,6 +61,8 @@ int	setup_and_fork_command(t_cmd *cmd, int cmd_index, t_pipe *data)
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (-1);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 		execute_command_process(cmd, cmd_index, data);
