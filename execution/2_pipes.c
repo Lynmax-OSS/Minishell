@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/24 08:05:42 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/30 03:11:24 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/10/31 23:26:41 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,31 +41,96 @@ static void	execute_all_commands(t_cmd *head, t_pipe *data)
 	data->commands_executed = cmd_index;
 }
 
-int	execution_pipeline(t_cmd *head, t_env *env)
-{
-	t_pipe		data;
-	int			status;
+// int	execution_pipeline(t_cmd *head, t_env *env)
+// {
+// 	t_pipe		data;
+// 	int			status;
 
-	data.env = env;
-	init_pipeline(head, &data);
-	if (!data.pids || !data.pipes)
+// 	data.env = env;
+// 	init_pipeline(head, &data);
+// 	if (!data.pids || !data.pipes)
+// 	{
+// 		free_cmd_list(head);
+// 		return (1);
+// 	}
+// 	execute_all_commands(head, &data);
+// 	if (data.pipes)
+// 	{
+// 		close_all_pipes(data.pipes, data.num_commands - 1);
+// 		cleanup_pipes(data.pipes, data.num_commands - 1);
+// 	}
+// 	if (data.pids)
+// 	{
+// 		status = wait_all_children(data.pids, data.commands_executed);
+// 		free(data.pids);
+// 		free_cmd_list(head);
+// 		g_exit_code = status;
+// 		return (status);
+// 	}
+// 	return (1);
+// }
+
+static int	process_all_heredocs(t_cmd *head, t_env *env)
+{
+	t_cmd	*cur;
+	t_redir	*redir;
+	int		fd;
+
+	cur = head;
+	while (cur)
 	{
-		free_cmd_list(head);
-		return (1);
+		redir = cur->redir;
+		while (redir)
+		{
+			if (ft_strcmp(redir->type, "<<") == 0)
+			{
+				fd = create_heredoc(redir->target, env);
+				if (fd == -1)
+					return (-1);
+				close(fd);
+			}
+			redir = redir->next;
+		}
+		cur = cur->next;
 	}
-	execute_all_commands(head, &data);
-	if (data.pipes)
+	return (0);
+}
+
+static int	handle_pipeline_cleanup(t_pipe *data, t_cmd *head)
+{
+	int	status;
+
+	if (data->pipes)
+		cleanup_pipes(data->pipes, data->num_commands - 1);
+	if (data->pids)
 	{
-		close_all_pipes(data.pipes, data.num_commands - 1);
-		cleanup_pipes(data.pipes, data.num_commands - 1);
-	}
-	if (data.pids)
-	{
-		status = wait_all_children(data.pids, data.commands_executed);
-		free(data.pids);
+		status = wait_all_children(data->pids, data->commands_executed);
+		free(data->pids);
 		free_cmd_list(head);
 		g_exit_code = status;
 		return (status);
 	}
+	free_cmd_list(head);
 	return (1);
+}
+
+int	execution_pipeline(t_cmd *head, t_env *env)
+{
+	t_pipe	data;
+	int		status;
+
+	data.env = env;
+	init_pipeline(head, &data);
+	if (!data.pids || !data.pipes)
+		return (free_cmd_list(head), 1);
+	if (process_all_heredocs(head, env) == -1)
+	{
+		cleanup_pipes(data.pipes, data.num_commands - 1);
+		return (free(data.pids), free_cmd_list(head), 1);
+	}
+	execute_all_commands(head, &data);
+	if (data.pipes)
+		close_all_pipes(data.pipes, data.num_commands - 1);
+	status = handle_pipeline_cleanup(&data, head);
+	return (status);
 }
