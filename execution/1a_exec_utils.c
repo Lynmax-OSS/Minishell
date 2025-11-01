@@ -6,7 +6,7 @@
 /*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 12:13:21 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/09/26 19:44:14 by qrajendr         ###   ########.fr       */
+/*   Updated: 2025/11/02 01:21:56 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	free_cmd_list(t_cmd *cmd)
 		while (cmd->redir)
 		{
 			redir_tmp = cmd->redir->next;
+			if (cmd->redir->fd >= 0)
+				close(cmd->redir->fd);
 			free(cmd->redir->type);
 			free(cmd->redir->target);
 			free(cmd->redir);

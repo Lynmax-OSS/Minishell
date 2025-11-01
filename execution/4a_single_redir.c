@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4a_single_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: keteo <keteo@student.42kl.edu.my>          +#+  +:+       +#+        */
+/*   By: qrajendr <qrajendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/26 09:18:41 by qrajendr          #+#    #+#             */
-/*   Updated: 2025/10/15 17:27:01 by keteo            ###   ########.fr       */
+/*   Updated: 2025/11/02 01:26:36 by qrajendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,16 @@ int	handle_single_redirection(t_redir *redir, t_env *env)
 	else if (ft_strcmp(redir->type, ">>") == 0)
 		fd = open_output_file(redir->target, 1);
 	else if (ft_strcmp(redir->type, "<<") == 0)
-		fd = create_heredoc(redir->target, env);
+	{
+		if (redir->fd != -1)
+		{
+			fd = redir->fd;
+			/* consume the stored fd so child doesn't try to reuse it */
+			redir->fd = -1;
+		}
+		else
+			fd = create_heredoc(redir->target, env);
+	}
 	if (fd == -1)
 		return (1);
 	if (ft_strcmp(redir->type, "<") == 0 || ft_strcmp(redir->type, "<<") == 0)

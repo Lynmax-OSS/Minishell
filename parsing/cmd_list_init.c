@@ -22,6 +22,7 @@ t_redir	*add_redir(t_redir *list, char *type, char *target)
 		return (list);
 	new->type = type;
 	new->target = target;
+	new->fd = -1;
 	new->next = NULL;
 	if (!list)
 		return (new);
